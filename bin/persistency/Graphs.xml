@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphs>
+	<graph name="Normal">
+		<vertex name="A" x="100" y="100" />
+		<vertex name="B" x="200" y="300" />
+		<vertex name="C" x="300" y="200" />
+		<edge from="A" to="B" />
+		<edge from="A" to="C" />
+		<edge from="C" to="B" />
+	</graph>
+	<graph name="Binary">
+		<vertex name="A" x="300" y="0" />
+		<vertex name="B" x="250" y="100" />
+		<vertex name="C" x="350" y="100" />
+		<vertex name="D" x="200" y="200" />
+		<vertex name="E" x="300" y="200" />
+		<edge from="A" to="B" />
+		<edge from="A" to="C" />
+		<edge from="B" to="D" />
+		<edge from="B" to="E" />
+	</graph>
+</graphs>

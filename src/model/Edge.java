@@ -1,17 +1,17 @@
 package model;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
-
-import javax.swing.JComponent;
+import java.awt.Graphics2D;
+import java.awt.geom.Line2D;
 
 @SuppressWarnings("serial")
-public class Edge extends JComponent {
+public class Edge extends GraphComponent {
 
 	private Vertex from;
 	private Vertex to;
-	private Color color;
-	
+		
 	/**
 	 * @param from
 	 * @param to
@@ -24,9 +24,13 @@ public class Edge extends JComponent {
 
 	@Override
 	public void paintComponent(Graphics g) {
-		g.setColor(this.color);
-		g.drawLine(this.from.getPosition().x, this.from.getPosition().y,
-				this.to.getPosition().x, this.to.getPosition().y);
+		Graphics2D g2 = (Graphics2D) g;
+        g2.setStroke(new BasicStroke(2));
+		g2.setColor(this.color);
+		g2.draw(new Line2D.Float(this.from.getPosition().x + this.from.getRadius(),
+				this.from.getPosition().y + this.from.getRadius(),
+				this.to.getPosition().x + this.from.getRadius(),
+				this.to.getPosition().y + this.from.getRadius()));
 	}
 
 	public Vertex getFrom() {

@@ -2,10 +2,20 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import model.Graph;
+import model.algorithms.Algorithm;
+import model.gui.AlgorithmComboBoxModel;
+import model.gui.AlgorithmListRenderer;
+import model.gui.GraphComboBoxModel;
+import model.gui.GraphListRenderer;
 
 
 @SuppressWarnings("serial")
@@ -14,11 +24,11 @@ public class MainView extends JFrame {
 	public final static int WINDOW_WIDTH = 600;
 	public final static int WINDOW_HEIGHT = 400;
 	
-	protected Canvas canvas;
-	protected JButton newVertexButton;
-	protected JButton newEdgeButton;
-	protected JButton clearButton;
-		
+	private Canvas canvas;
+	private JComboBox<Graph> graphComboBox;
+	private JComboBox<Algorithm> algoComboBox;
+	private JButton runButton;
+			
 	/**
 	 * 
 	 */
@@ -32,14 +42,16 @@ public class MainView extends JFrame {
 		this.canvas.setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
 		this.getContentPane().add(this.canvas, BorderLayout.CENTER);
 
-		JPanel buttonsPanel = new JPanel();
-		this.newVertexButton = new JButton("New Vertex");
-		this.newEdgeButton = new JButton("New Edge");
-		this.clearButton = new JButton("Clear");
-		buttonsPanel.add(this.newVertexButton);
-		buttonsPanel.add(this.newEdgeButton);
-		buttonsPanel.add(this.clearButton);
-		this.getContentPane().add(buttonsPanel, BorderLayout.SOUTH);
+		JPanel graphPanel = new JPanel();
+		this.graphComboBox = new JComboBox<Graph>();
+		this.algoComboBox = new JComboBox<Algorithm>();
+		this.runButton = new JButton("Run");
+		graphPanel.add(new JLabel("Select graph:"));
+		graphPanel.add(this.graphComboBox);
+		graphPanel.add(new JLabel("Select algorithm:"));
+		graphPanel.add(this.algoComboBox);
+		graphPanel.add(this.runButton);
+		this.getContentPane().add(graphPanel, BorderLayout.NORTH);
 		
 		this.pack();
 		this.setVisible(true);
@@ -49,17 +61,30 @@ public class MainView extends JFrame {
 		return canvas;
 	}
 
-	public JButton getNewVertexButton() {
-		return newVertexButton;
+	public void setGraphs(ArrayList<Graph> graphs) {
+		this.graphComboBox.setModel(new GraphComboBoxModel(graphs));
+		this.graphComboBox.setRenderer(new GraphListRenderer());
 	}
 
-	public JButton getNewEdgeButton() {
-		return newEdgeButton;
+	public void setAlgorithms(ArrayList<Algorithm> algorithms) {
+		this.algoComboBox.setModel(new AlgorithmComboBoxModel(algorithms));
+		this.algoComboBox.setRenderer(new AlgorithmListRenderer());
 	}
 
-	public JButton getClearButton() {
-		return clearButton;
+	public JComboBox<Graph> getGraphComboBox() {
+		return this.graphComboBox;
 	}
 
+	public Graph getSelectedGraph() {
+		return (Graph) this.graphComboBox.getSelectedItem();
+	}
+	
+	public Algorithm getSelectedAlgorithm() {
+		return (Algorithm) this.algoComboBox.getSelectedItem();
+	}
+	
+	public JButton getRunButton() {
+		return this.runButton;
+	}
 	
 }

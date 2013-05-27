@@ -1,12 +1,9 @@
 package model;
 
-import java.awt.Color;
 import java.awt.Graphics;
 
-import javax.swing.JComponent;
-
 @SuppressWarnings("serial")
-public class Line extends JComponent {
+public class Line extends GraphComponent {
 	
 	private Coordinate from;
 	private Coordinate to;
@@ -22,8 +19,17 @@ public class Line extends JComponent {
 
 	@Override
 	public void paintComponent(Graphics g) {
-        g.setColor(Color.black);
+		g.setColor(this.color);
         g.drawLine(this.from.x, this.from.y, this.to.x, this.to.y);
 	}
+
+	public Coordinate getFrom() {
+		return from;
+	}
+
+	public Coordinate getTo() {
+		return to;
+	}
+	
 
 }
