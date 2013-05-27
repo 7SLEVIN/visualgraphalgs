@@ -1,11 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <graphs>
-	<graph name="Normal">
+	<graph name="Default">
+		<vertex name="A" x="15" y="60" />
+		<vertex name="B" x="70" y="280" />
+		<vertex name="C" x="150" y="180" />
+		<vertex name="D" x="175" y="25" />
+		<vertex name="E" x="300" y="50" />
+		<vertex name="F" x="250" y="330" />
+		<vertex name="G" x="550" y="25" />
+		<vertex name="H" x="500" y="300" />
+		<vertex name="I" x="370" y="175" />
+		<vertex name="J" x="300" y="220" />
+		<edge from="A" to="B" />
+		<edge from="D" to="A" />
+		<edge from="D" to="C" />
+		<edge from="C" to="B" />
+		<edge from="C" to="J" />
+		<edge from="J" to="F" />
+		<edge from="E" to="J" />
+		<edge from="D" to="E" />
+		<edge from="B" to="F" />
+		<edge from="E" to="G" />
+		<edge from="E" to="I" />
+		<edge from="I" to="H" />
+		<edge from="G" to="H" />
+		<edge from="G" to="I" />
+	</graph>
+	<graph name="Strong">
 		<vertex name="A" x="100" y="100" />
 		<vertex name="B" x="200" y="300" />
 		<vertex name="C" x="300" y="200" />
 		<edge from="A" to="B" attribute="4" />
-		<edge from="A" to="C" attribute="6" />
+		<edge from="C" to="A" attribute="6" />
 		<edge from="C" to="B" attribute="2" />
 	</graph>
 	<graph name="Binary">
