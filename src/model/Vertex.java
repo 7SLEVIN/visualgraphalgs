@@ -12,7 +12,6 @@ import java.awt.geom.Ellipse2D;
 @SuppressWarnings("serial")
 public class Vertex extends GraphComponent {
 
-	private String name;
 	private Coordinate position;
 	private int radius;
 	
@@ -21,7 +20,8 @@ public class Vertex extends GraphComponent {
 	 * @param position
 	 */
 	public Vertex(String name, Coordinate position) {
-		this.name = name;
+		super(name);
+		
 		this.position = position;
 		this.radius = 20;
 		this.color = Color.lightGray;
@@ -47,18 +47,25 @@ public class Vertex extends GraphComponent {
 		// x,y is bottom left corner of text
 		g2d.drawString(this.name, this.position.x + this.radius - width / 2,
 				this.position.y + this.radius + height / 2);
+    	
+		if (this.attribute != null && !this.attribute.equals("")) {
+	    	font = new Font("Verdana", Font.PLAIN, 10);
+	    	g2d.setFont(font);
+	    	g2d.setColor(Color.black);
+			width = g2d.getFontMetrics().stringWidth(this.attribute);
+			fr = g2d.getFontRenderContext();
+			lm = font.getLineMetrics(this.attribute, fr);
+			height = (int) (lm.getAscent() * .76 + .5); // Compensate for overstating
+			// x,y is bottom left corner of text
+			g2d.drawString(this.attribute, this.position.x, this.position.y);
+		}
     }
 
-//	private static void drawCenteredString(final Graphics2D g2d,
-//			final String text, final int x, final int y) {
-//		final Font font = g2d.getFont();
-//		int width = g2d.getFontMetrics().stringWidth(text);
-//		final FontRenderContext fr = g2d.getFontRenderContext();
-//		final LineMetrics lm = font.getLineMetrics(text, fr);
-//		final int height = (int) (lm.getAscent() * .76 + .5); // Compensate for overstating
-//		// x,y is bottom left corner of text
-//		g2d.drawString(text, x - width / 2, y + height / 2);
-//	}
+    public void reset() {
+    	this.color = Color.lightGray;
+    	this.visisted = false;
+    	this.attribute = null;
+    }
 
 	public Coordinate getPosition() {
 		return position;
@@ -74,22 +81,6 @@ public class Vertex extends GraphComponent {
 
 	public void setRadius(int radius) {
 		this.radius = radius;
-	}
-
-	public String getName() {
-		return name;
-	}
-	
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public Color getColor() {
-		return color;
-	}
-
-	public void setColor(Color color) {
-		this.color = color;
 	}
 	
 }

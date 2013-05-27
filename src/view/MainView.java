@@ -9,6 +9,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import model.Graph;
 import model.algorithms.Algorithm;
@@ -27,7 +28,10 @@ public class MainView extends JFrame {
 	private Canvas canvas;
 	private JComboBox<Graph> graphComboBox;
 	private JComboBox<Algorithm> algoComboBox;
+	private JTextField vertexNameInput;
 	private JButton runButton;
+	private JButton resetButton;
+	private JLabel resultLabel;
 			
 	/**
 	 * 
@@ -45,13 +49,24 @@ public class MainView extends JFrame {
 		JPanel graphPanel = new JPanel();
 		this.graphComboBox = new JComboBox<Graph>();
 		this.algoComboBox = new JComboBox<Algorithm>();
+		this.vertexNameInput = new JTextField(2);
 		this.runButton = new JButton("Run");
-		graphPanel.add(new JLabel("Select graph:"));
+		this.resetButton = new JButton("Reset");
+		graphPanel.add(new JLabel("Graph:"));
 		graphPanel.add(this.graphComboBox);
-		graphPanel.add(new JLabel("Select algorithm:"));
+		graphPanel.add(new JLabel("Algorithm:"));
 		graphPanel.add(this.algoComboBox);
+		graphPanel.add(new JLabel("Find:"));
+		graphPanel.add(this.vertexNameInput);
 		graphPanel.add(this.runButton);
+		graphPanel.add(this.resetButton);
 		this.getContentPane().add(graphPanel, BorderLayout.NORTH);
+		
+		JPanel resultPanel = new JPanel();
+		this.resultLabel = new JLabel();
+		resultPanel.add(new JLabel("Result:"));
+		resultPanel.add(this.resultLabel);
+		this.getContentPane().add(resultPanel, BorderLayout.SOUTH);
 		
 		this.pack();
 		this.setVisible(true);
@@ -86,5 +101,16 @@ public class MainView extends JFrame {
 	public JButton getRunButton() {
 		return this.runButton;
 	}
+
+	public String getVertexNameInput() {
+		return this.vertexNameInput.getText();
+	}
 	
+	public void setResultLabel(String result) {
+		this.resultLabel.setText(result);
+	}
+	
+	public JButton getResetButton() {
+		return this.resetButton;
+	}
 }

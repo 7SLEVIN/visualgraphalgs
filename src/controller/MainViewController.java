@@ -28,9 +28,13 @@ public class MainViewController {
 		this.algorithms.add(new BFS("BFS"));
 
 		ActionUtils.addListener(this.view.getRunButton(), this, "runAlgorithm");
+		ActionUtils.addListener(this.view.getResetButton(), this, "reset");
 
 		this.fillGraphs();
 		this.fillAlgorits();
+		
+		this.view.getGraphComboBox().setSelectedIndex(0);
+		this.view.getCanvas().setGraph(graphs.get(0));
 		
 		ItemListener graphComboBoxListener = new ItemListener() {
 			@Override
@@ -41,6 +45,12 @@ public class MainViewController {
 			}	
 		};
 		this.view.getGraphComboBox().addItemListener(graphComboBoxListener);
+	}
+	
+	public void reset() {
+		Graph graph = this.view.getSelectedGraph();
+		graph.reset();
+		this.view.getCanvas().repaint();
 	}
 	
 	private void fillAlgorits() {
@@ -64,22 +74,14 @@ public class MainViewController {
 			return;
 		}
 		
-		algorithm.run(graph);
+		String vertexName = this.view.getVertexNameInput();
+		if (vertexName == "") {
+			Dialog.message("No vertex name entered!");
+			return;
+		}
+		
+		this.view.setResultLabel(String.valueOf(algorithm.run(vertexName, graph)));
+		this.view.getCanvas().repaint();
 	}
-
-//	public void addRandomVertex() {
-//		int x = (int) (Math.random() * MainView.WINDOW_WIDTH);
-//		int y = (int) (Math.random() * MainView.WINDOW_HEIGHT);
-//		// Color randomColor = new Color((float) Math.random(),
-//		// (float) Math.random(), (float) Math.random());
-//		this.view.getCanvas().addComponent(new Vertex("A", new Coordinate(x, y)));
-//	}
-//
-//	public void addRandomEdge() {
-//		// Color randomColor = new Color((float) Math.random(),
-//		// (float) Math.random(), (float) Math.random());
-//		this.view.getCanvas().getVertices();
-//		this.view.getCanvas().addComponent(new Line(from, to));
-//	}
 
 }

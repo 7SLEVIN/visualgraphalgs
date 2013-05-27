@@ -4,9 +4,9 @@
 		<vertex name="A" x="100" y="100" />
 		<vertex name="B" x="200" y="300" />
 		<vertex name="C" x="300" y="200" />
-		<edge from="A" to="B" />
-		<edge from="A" to="C" />
-		<edge from="C" to="B" />
+		<edge from="A" to="B" attribute="4" />
+		<edge from="A" to="C" attribute="6" />
+		<edge from="C" to="B" attribute="2" />
 	</graph>
 	<graph name="Binary">
 		<vertex name="A" x="300" y="0" />

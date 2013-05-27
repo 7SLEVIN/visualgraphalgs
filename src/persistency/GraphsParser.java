@@ -71,20 +71,26 @@ public class GraphsParser extends DefaultHandler {
         Graph current = null;
         if (idx >= 0) current = this.graphs.get(idx);
         
-        switch (qName) {
-            case "graph":
-            	this.graphs.add(new Graph(atts.getValue("name")));
-            	break;
-            case "vertex":
-            	current.addVertex(new Vertex(atts.getValue("name"), 
-            			new Coordinate(Integer.parseInt(atts.getValue("x")), 
-            					Integer.parseInt(atts.getValue("y")))));
-                break;
-            case "edge":
-            	Vertex from = current.getVertex(atts.getValue("from"));
-            	Vertex to = current.getVertex(atts.getValue("to"));
-            	current.addEdge(new Edge(from, to));
-                break;
+        if (qName.equals("graph")) {
+			this.graphs.add(new Graph(atts.getValue("name")));
+        } else if (qName.equals("vertex")) {
+			Vertex vertex = new Vertex(atts.getValue("name"), new Coordinate(
+					Integer.parseInt(atts.getValue("x")), Integer.parseInt(atts
+							.getValue("y"))));
+			current.addVertex(vertex);
+			String attribute = atts.getValue("attribute");
+			if (attribute != null && !attribute.equals("")) {
+				vertex.setAttribute(attribute);
+			}
+        } else if (qName.equals("edge")) {
+			Vertex from = current.getVertex(atts.getValue("from"));
+			Vertex to = current.getVertex(atts.getValue("to"));
+			Edge edge = new Edge(from, to);
+			current.addEdge(edge);
+			String attribute = atts.getValue("attribute");
+			if (attribute != null && !attribute.equals("")) {
+				edge.setAttribute(attribute);
+			}
         }
     }
 

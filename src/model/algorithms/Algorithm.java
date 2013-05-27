@@ -14,7 +14,7 @@ abstract public class Algorithm {
 		this.name = name;
 	}
 	
-	abstract public void run(Graph graph);
+	abstract public int run(String vertexName, Graph graph);
 
 	public String getName() {
 		return name;

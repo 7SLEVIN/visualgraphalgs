@@ -9,6 +9,7 @@ public class Graph {
 	private String name;
 	private HashMap<String, Vertex> vertices;
 	private HashMap<Vertex, Collection<Edge>> edges;
+	private Vertex first;
 	
 	/**
 	 * @param name
@@ -49,10 +50,32 @@ public class Graph {
 	}
 
 	public void addVertex(Vertex vertex) {
+		if (this.vertices.size() == 0) this.first = vertex;
+		
 		if (this.vertices.get(vertex.getName()) != null) {
 			System.err.println("WARNING: Overwriting vertex " + vertex.getName());
 		}
 		this.vertices.put(vertex.getName(), vertex);
+	}
+	
+	public Vertex getFirst() {
+		return this.first;
+	}
+
+	public ArrayList<Edge> getEdges(Vertex vertex) {
+		return (ArrayList<Edge>) this.edges.get(vertex);
+	}
+
+	public void reset() {
+		for (Collection<Edge> values : this.getEdges().values()) {
+			for (Edge edge : values) {
+				edge.reset();
+			}
+		}
+		
+		for (Vertex vertex : this.getVertices().values()) {
+			vertex.reset();
+		}
 	}
 	
 }
