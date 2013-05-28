@@ -16,11 +16,9 @@ import model.Coordinate;
 
 public class GraphicsUtils {
 	
-	public static void drawArrow(Graphics g, Color color, 
+	public static void drawArrow(Graphics g, Color color, int size, 
 			Coordinate from, Coordinate to, Coordinate offset) {
         Graphics2D g2 = (Graphics2D) g.create();
-        
-        final int ARR_SIZE = 4;
 
         double dx = to.x - from.x, dy = to.y - from.y;
         double angle = Math.atan2(dy, dx);
@@ -31,8 +29,8 @@ public class GraphicsUtils {
 
         // Draw horizontal arrow starting in (0, 0)
         g2.drawLine(0, 0, len, 0);
-        g2.fillPolygon(new int[] {len, len-ARR_SIZE, len-ARR_SIZE, len},
-                      new int[] {0, -ARR_SIZE, ARR_SIZE, 0}, 4);
+        g2.fillPolygon(new int[] {len, len-size, len-size, len},
+        		new int[] {0, -size, size, 0}, 4);
     }
 	
 	public static void drawText(Graphics g, Color color, Font font, String text,
@@ -48,7 +46,9 @@ public class GraphicsUtils {
 		int height = (int) (lm.getAscent() * .76 + .5); // Compensate for overstating
 		
 		// x,y is bottom left corner of text
-		g2.drawString(text, position.x + offset.x - width/2, position.y + offset.y + height/2);
+		g2.drawString(text, 
+				(int) (position.x + offset.x - width/2), 
+				(int) (position.y + offset.y + height/2));
 	}
 
 	public static void drawLine(Graphics g, Color color, Coordinate from, Coordinate to,
@@ -58,14 +58,15 @@ public class GraphicsUtils {
 		g2.setStroke(new BasicStroke(2));
 		g2.setColor(color);
 		
-		g2.draw(new Line2D.Float(from.x + offset.x, from.y + offset.y, 
+		g2.draw(new Line2D.Double(
+				from.x + offset.x, from.y + offset.y, 
 				to.x + offset.x, to.y + offset.y));
 	}
 	
-	public static void drawCircle(Graphics g, Color color, Coordinate position, int radius) {
+	public static void drawCircle(Graphics g, Color color, Coordinate position, double radius) {
     	Graphics2D g2d = (Graphics2D) g;
     	
-    	Shape circle = new Ellipse2D.Float(position.x, position.y, radius*2, radius*2);
+    	Shape circle = new Ellipse2D.Double(position.x, position.y, radius*2, radius*2);
     	g2d.draw(circle);
     	
     	g2d.setPaint(color);

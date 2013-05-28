@@ -10,7 +10,7 @@ import utils.GraphicsUtils;
 public class Vertex extends GraphComponent {
 
 	private Coordinate position;
-	private int radius;
+	private double radius;
 	
 	/**
 	 * @param name
@@ -42,6 +42,11 @@ public class Vertex extends GraphComponent {
     	this.visisted = false;
     	this.attribute = null;
     }
+	
+	@Override
+	public String toString() {
+		return String.format("%s name='%s'", this.getClass().getName(), this.name);
+	}
 
 	public Coordinate getPosition() {
 		return position;
@@ -51,7 +56,7 @@ public class Vertex extends GraphComponent {
 		this.position = position;
 	}
 	
-	public int getRadius() {
+	public double getRadius() {
 		return radius;
 	}
 

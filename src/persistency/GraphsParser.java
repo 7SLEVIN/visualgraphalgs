@@ -75,8 +75,8 @@ public class GraphsParser extends DefaultHandler {
 			this.graphs.add(new Graph(atts.getValue("name")));
         } else if (qName.equals("vertex")) {
 			Vertex vertex = new Vertex(atts.getValue("name"), new Coordinate(
-					Integer.parseInt(atts.getValue("x")), Integer.parseInt(atts
-							.getValue("y"))));
+					Double.parseDouble(atts.getValue("x")), 
+					Double.parseDouble(atts.getValue("y"))));
 			current.addVertex(vertex);
 			String attribute = atts.getValue("attribute");
 			if (attribute != null && !attribute.equals("")) {

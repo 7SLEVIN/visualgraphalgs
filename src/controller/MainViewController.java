@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import model.Graph;
 import model.algorithms.Algorithm;
 import model.algorithms.BFS;
+import model.algorithms.SearchAlgorithm;
 import persistency.GraphsParser;
 import utils.ActionUtils;
 import utils.Dialog;
@@ -17,6 +18,7 @@ public class MainViewController {
 	protected final MainView view;
 	protected ArrayList<Graph> graphs;
 	protected ArrayList<Algorithm> algorithms;
+	private boolean ready;
 
 	/**
 	 * @param view
@@ -26,6 +28,7 @@ public class MainViewController {
 		this.graphs = new GraphsParser().parse();
 		this.algorithms = new ArrayList<Algorithm>();
 		this.algorithms.add(new BFS("BFS"));
+		this.ready = true;
 
 		ActionUtils.addListener(this.view.getRunButton(), this, "runAlgorithm");
 		ActionUtils.addListener(this.view.getResetButton(), this, "reset");
@@ -41,6 +44,7 @@ public class MainViewController {
 			public void itemStateChanged(ItemEvent e) {
 				if (e.getStateChange() == ItemEvent.SELECTED) {
 					view.getCanvas().setGraph(view.getSelectedGraph());
+					ready = false;
 				}
 			}	
 		};
@@ -49,8 +53,22 @@ public class MainViewController {
 	
 	public void reset() {
 		Graph graph = this.view.getSelectedGraph();
+		if (graph == null) {
+			Dialog.message("No graph selected!");
+			return;
+		}
+		
+		Algorithm algorithm = this.view.getSelectedAlgorithm();
+		if (algorithm == null) {
+			Dialog.message("No algorithm selected!");
+			return;
+		}
+		
+		algorithm.reset();
 		graph.reset();
-		this.view.getCanvas().repaint();
+		
+		this.view.getCanvas().setGraph(graph);
+		this.ready = true;
 	}
 	
 	private void fillAlgorits() {
@@ -74,14 +92,33 @@ public class MainViewController {
 			return;
 		}
 		
-		String vertexName = this.view.getVertexNameInput();
-		if (vertexName == "") {
+		String find = this.view.getFindInput();
+		if (find.equals("")) {
 			Dialog.message("No vertex name entered!");
 			return;
 		}
 		
-		this.view.setResultLabel(String.valueOf(algorithm.run(vertexName, graph)));
-		this.view.getCanvas().repaint();
+		if (!this.ready) {
+			Dialog.message("You must reset first!");
+			return;
+		}
+		
+		if (algorithm instanceof SearchAlgorithm) {
+			SearchAlgorithm searchAlgorithm = (SearchAlgorithm) algorithm;
+
+
+			if (!searchAlgorithm.isInitialized()) {
+				searchAlgorithm.initialize(find, graph);	
+			}
+			
+			searchAlgorithm.run();
+			this.view.getCanvas().repaint();	
+
+			if (searchAlgorithm.getResult() != null) {
+				this.view.setResultLabel(String.format("%d", searchAlgorithm.getResult()));
+				this.ready = false;
+			}
+		}
 	}
 
 }

@@ -28,8 +28,8 @@ public class MainView extends JFrame {
 	private Canvas canvas;
 	private JComboBox<Graph> graphComboBox;
 	private JComboBox<Algorithm> algoComboBox;
-	private JTextField vertexNameInput;
-	private JButton runButton;
+	private JTextField findInput;
+	private JButton stepButton;
 	private JButton resetButton;
 	private JLabel resultLabel;
 			
@@ -49,16 +49,16 @@ public class MainView extends JFrame {
 		JPanel graphPanel = new JPanel();
 		this.graphComboBox = new JComboBox<Graph>();
 		this.algoComboBox = new JComboBox<Algorithm>();
-		this.vertexNameInput = new JTextField(2);
-		this.runButton = new JButton("Run");
+		this.findInput = new JTextField(2);
+		this.stepButton = new JButton("Step");
 		this.resetButton = new JButton("Reset");
 		graphPanel.add(new JLabel("Graph:"));
 		graphPanel.add(this.graphComboBox);
 		graphPanel.add(new JLabel("Algorithm:"));
 		graphPanel.add(this.algoComboBox);
 		graphPanel.add(new JLabel("Find:"));
-		graphPanel.add(this.vertexNameInput);
-		graphPanel.add(this.runButton);
+		graphPanel.add(this.findInput);
+		graphPanel.add(this.stepButton);
 		graphPanel.add(this.resetButton);
 		this.getContentPane().add(graphPanel, BorderLayout.NORTH);
 		
@@ -99,11 +99,11 @@ public class MainView extends JFrame {
 	}
 	
 	public JButton getRunButton() {
-		return this.runButton;
+		return this.stepButton;
 	}
 
-	public String getVertexNameInput() {
-		return this.vertexNameInput.getText();
+	public String getFindInput() {
+		return this.findInput.getText();
 	}
 	
 	public void setResultLabel(String result) {

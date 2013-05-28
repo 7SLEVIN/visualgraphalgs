@@ -3,18 +3,28 @@ package model.algorithms;
 import model.Graph;
 
 
-abstract public class Algorithm {
+abstract public class Algorithm implements Runnable {
 	
-	private String name;
+	protected String name;
+	protected Graph graph;
+	public static final Class[] ALGORITHM_TYPES = {SearchAlgorithm.class};
+	protected boolean initialized;
 	
 	/**
 	 * @param name
 	 */
 	public Algorithm(String name) {
 		this.name = name;
+		this.initialized = false;
 	}
 	
-	abstract public int run(String vertexName, Graph graph);
+	abstract protected void iterate();
+	
+	abstract public void reset();
+
+	public boolean isInitialized() {
+		return initialized;
+	}
 
 	public String getName() {
 		return name;
