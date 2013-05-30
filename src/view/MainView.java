@@ -22,14 +22,15 @@ import model.gui.GraphListRenderer;
 @SuppressWarnings("serial")
 public class MainView extends JFrame {
 
-	public final static int WINDOW_WIDTH = 600;
-	public final static int WINDOW_HEIGHT = 400;
+	public final static int WINDOW_WIDTH = 700;
+	public final static int WINDOW_HEIGHT = 450;
 	
 	private Canvas canvas;
 	private JComboBox<Graph> graphComboBox;
 	private JComboBox<Algorithm> algoComboBox;
 	private JLabel findLabel;
 	private JTextField findInput;
+	private JButton runButton;
 	private JButton stepButton;
 	private JButton resetButton;
 	private JLabel resultLabel;
@@ -55,6 +56,7 @@ public class MainView extends JFrame {
 		this.findInput = new JTextField(2);
 		this.findInput.setVisible(false);
 		this.stepButton = new JButton("Step");
+		this.runButton = new JButton("Run");
 		this.resetButton = new JButton("Reset");
 		graphPanel.add(new JLabel("Graph:"));
 		graphPanel.add(this.graphComboBox);
@@ -63,6 +65,7 @@ public class MainView extends JFrame {
 		graphPanel.add(this.findLabel);
 		graphPanel.add(this.findInput);
 		graphPanel.add(this.stepButton);
+		graphPanel.add(this.runButton);
 		graphPanel.add(this.resetButton);
 		this.getContentPane().add(graphPanel, BorderLayout.NORTH);
 		
@@ -106,7 +109,7 @@ public class MainView extends JFrame {
 		return (Algorithm) this.algoComboBox.getSelectedItem();
 	}
 	
-	public JButton getRunButton() {
+	public JButton getStepButton() {
 		return this.stepButton;
 	}
 
@@ -124,5 +127,9 @@ public class MainView extends JFrame {
 
 	public JLabel getFindLabel() {
 		return findLabel;
+	}
+
+	public JButton getRunButton() {
+		return runButton;
 	}
 }

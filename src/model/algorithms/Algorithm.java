@@ -1,13 +1,13 @@
 package model.algorithms;
 
 import model.Graph;
+import model.exception.AlgorithmFinishedException;
 
 
 abstract public class Algorithm implements Runnable {
 	
 	protected String name;
 	protected Graph graph;
-	public static final Class[] ALGORITHM_TYPES = {SearchAlgorithm.class};
 	protected boolean initialized;
 	
 	/**

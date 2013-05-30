@@ -3,16 +3,18 @@ package model.algorithms;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.PriorityQueue;
 import java.util.Queue;
 
 import model.Edge;
 import model.Graph;
 import model.Vertex;
+import utils.EdgeComparator;
 
 public class BFS extends SearchAlgorithm {
 
 	private Queue<Vertex> queue;
-	private Queue<Edge> edges;
+	private PriorityQueue<Edge> edges;
 	private Vertex currentVertex;
 
 	/**
@@ -22,7 +24,6 @@ public class BFS extends SearchAlgorithm {
 		super(name);
 
 		this.queue = new LinkedList<Vertex>();
-		this.edges = new LinkedList<Edge>();
 	}
 	
 	@Override
@@ -32,7 +33,7 @@ public class BFS extends SearchAlgorithm {
 		this.currentVertex = graph.getFirst();
 		this.currentVertex.visit();
 		this.currentVertex.setAttribute(String.valueOf("0")); // depth
-
+		
 		this.queue.add(this.currentVertex);
 	}
 
@@ -45,13 +46,16 @@ public class BFS extends SearchAlgorithm {
 			System.err.println("WARNING: Algorithm not initialized");
 			return;
 		}
+		
 		this.iterate();
 	}
 
 	@Override
 	protected void iterate() {
+		if (this.result != null) System.err.println("WARNING: Algorithm already finished");
+		
 		// Go through neighbours
-		if (!this.edges.isEmpty()) {
+		if (this.edges != null && !this.edges.isEmpty()) {
 			Edge edge = this.edges.remove();
 			
 			Vertex toVertex = edge.getTo();
@@ -88,6 +92,8 @@ public class BFS extends SearchAlgorithm {
 			this.iterate(); // no edges
 			return;
 		}
+		
+		this.edges = new PriorityQueue<Edge>(found.size(), new EdgeComparator());
 		
 		for (Edge edge : found) {
 			this.edges.add(edge);

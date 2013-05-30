@@ -3,6 +3,8 @@ package controller;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import model.Graph;
 import model.algorithms.Algorithm;
@@ -30,6 +32,7 @@ public class MainViewController {
 		this.algorithms.add(new BFS("BFS"));
 		this.ready = true;
 
+		ActionUtils.addListener(this.view.getStepButton(), this, "stepAlgorithm");
 		ActionUtils.addListener(this.view.getRunButton(), this, "runAlgorithm");
 		ActionUtils.addListener(this.view.getResetButton(), this, "reset");
 
@@ -92,7 +95,56 @@ public class MainViewController {
 		this.view.setGraphs(this.graphs);
 	}
 	
-	public void runAlgorithm() {
+	public void runAlgorithm() throws Exception {
+		Graph graph = this.view.getSelectedGraph();
+		if (graph == null) {
+			Dialog.message("No graph selected!");
+			return;
+		}
+		
+		Algorithm algorithm = this.view.getSelectedAlgorithm();
+		if (algorithm == null) {
+			Dialog.message("No algorithm selected!");
+			return;
+		}
+		
+		String find = this.view.getFindInput().getText();
+		if (find.equals("")) {
+			Dialog.message("No vertex name entered!");
+			return;
+		}
+		
+		if (!this.ready) {
+			Dialog.message("You must reset first!");
+			return;
+		}
+		
+		if (algorithm instanceof SearchAlgorithm) {
+			final SearchAlgorithm searchAlgorithm = (SearchAlgorithm) algorithm;
+
+
+			if (!searchAlgorithm.isInitialized()) {
+				searchAlgorithm.initialize(find, graph);	
+			}
+			
+			new Timer().scheduleAtFixedRate(new TimerTask() {
+				@Override
+				public void run() {
+					if (searchAlgorithm.getResult() != null) {
+						view.setResultLabel(String.format("%d", searchAlgorithm.getResult()));
+						ready = false;
+						this.cancel();
+						return;
+					} 
+					
+					searchAlgorithm.run();
+					view.getCanvas().repaint();
+				}
+			}, 0, 1000);	
+		}
+	}
+	
+	public void stepAlgorithm() {
 		Graph graph = this.view.getSelectedGraph();
 		if (graph == null) {
 			Dialog.message("No graph selected!");
