@@ -50,7 +50,7 @@ public class BFS extends SearchAlgorithm {
 
 	@Override
 	protected void iterate() {
-		
+		// Go through neighbours
 		if (!this.edges.isEmpty()) {
 			Edge edge = this.edges.remove();
 			
@@ -62,7 +62,7 @@ public class BFS extends SearchAlgorithm {
 
 				this.queue.add(toVertex);
 				
-				if (toVertex.getName().equals(this.find)) {
+				if (toVertex.getName().equalsIgnoreCase(this.find)) {
 					toVertex.setColor(Color.green);
 					this.result = Integer.parseInt(toVertex.getAttribute());
 				}
@@ -73,15 +73,16 @@ public class BFS extends SearchAlgorithm {
 			return;
 		}
 		
-		// Nothing found
+		// Graph covered without finding anything
 		if (this.queue.isEmpty()) {
 			this.result = 0;
 			return;
 		}
 
+		// Populate queue with neighbours
 		Vertex vertex = this.queue.remove();
 		this.currentVertex = vertex;
-
+		
 		ArrayList<Edge> found = graph.getEdges(vertex); 
 		if (found == null) {
 			this.iterate(); // no edges

@@ -39,35 +39,48 @@ public class MainViewController {
 		this.view.getGraphComboBox().setSelectedIndex(0);
 		this.view.getCanvas().setGraph(graphs.get(0));
 		
-		ItemListener graphComboBoxListener = new ItemListener() {
+		this.view.getGraphComboBox().addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				if (e.getStateChange() == ItemEvent.SELECTED) {
 					view.getCanvas().setGraph(view.getSelectedGraph());
-					ready = false;
+					reset();
 				}
 			}	
-		};
-		this.view.getGraphComboBox().addItemListener(graphComboBoxListener);
+		});
+		
+		this.view.getAlgoComboBox().addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				if (e.getStateChange() == ItemEvent.SELECTED) {
+					if (view.getSelectedAlgorithm() instanceof SearchAlgorithm) {
+						view.getFindLabel().setVisible(true);
+						view.getFindInput().setVisible(true);
+					} else {
+						view.getFindLabel().setVisible(false);
+						view.getFindInput().setVisible(false);
+					}
+				}
+			}	
+		});
 	}
 	
 	public void reset() {
 		Graph graph = this.view.getSelectedGraph();
-		if (graph == null) {
-			Dialog.message("No graph selected!");
-			return;
+		if (graph != null) {
+			graph.reset();
+			this.view.getCanvas().setGraph(graph);
+//			Dialog.message("No graph selected!");
+//			return;
 		}
 		
 		Algorithm algorithm = this.view.getSelectedAlgorithm();
-		if (algorithm == null) {
-			Dialog.message("No algorithm selected!");
-			return;
+		if (algorithm != null) {
+			algorithm.reset();
+//			Dialog.message("No algorithm selected!");
+//			return;
 		}
 		
-		algorithm.reset();
-		graph.reset();
-		
-		this.view.getCanvas().setGraph(graph);
 		this.ready = true;
 	}
 	
@@ -92,7 +105,7 @@ public class MainViewController {
 			return;
 		}
 		
-		String find = this.view.getFindInput();
+		String find = this.view.getFindInput().getText();
 		if (find.equals("")) {
 			Dialog.message("No vertex name entered!");
 			return;
@@ -117,7 +130,7 @@ public class MainViewController {
 			if (searchAlgorithm.getResult() != null) {
 				this.view.setResultLabel(String.format("%d", searchAlgorithm.getResult()));
 				this.ready = false;
-			}
+			} 
 		}
 	}
 

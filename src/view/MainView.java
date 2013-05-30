@@ -28,6 +28,7 @@ public class MainView extends JFrame {
 	private Canvas canvas;
 	private JComboBox<Graph> graphComboBox;
 	private JComboBox<Algorithm> algoComboBox;
+	private JLabel findLabel;
 	private JTextField findInput;
 	private JButton stepButton;
 	private JButton resetButton;
@@ -49,14 +50,17 @@ public class MainView extends JFrame {
 		JPanel graphPanel = new JPanel();
 		this.graphComboBox = new JComboBox<Graph>();
 		this.algoComboBox = new JComboBox<Algorithm>();
+		this.findLabel = new JLabel("Find:");
+		this.findLabel.setVisible(false);
 		this.findInput = new JTextField(2);
+		this.findInput.setVisible(false);
 		this.stepButton = new JButton("Step");
 		this.resetButton = new JButton("Reset");
 		graphPanel.add(new JLabel("Graph:"));
 		graphPanel.add(this.graphComboBox);
 		graphPanel.add(new JLabel("Algorithm:"));
 		graphPanel.add(this.algoComboBox);
-		graphPanel.add(new JLabel("Find:"));
+		graphPanel.add(this.findLabel);
 		graphPanel.add(this.findInput);
 		graphPanel.add(this.stepButton);
 		graphPanel.add(this.resetButton);
@@ -90,6 +94,10 @@ public class MainView extends JFrame {
 		return this.graphComboBox;
 	}
 
+	public JComboBox<Algorithm> getAlgoComboBox() {
+		return algoComboBox;
+	}
+
 	public Graph getSelectedGraph() {
 		return (Graph) this.graphComboBox.getSelectedItem();
 	}
@@ -102,8 +110,8 @@ public class MainView extends JFrame {
 		return this.stepButton;
 	}
 
-	public String getFindInput() {
-		return this.findInput.getText();
+	public JTextField getFindInput() {
+		return this.findInput;
 	}
 	
 	public void setResultLabel(String result) {
@@ -112,5 +120,9 @@ public class MainView extends JFrame {
 	
 	public JButton getResetButton() {
 		return this.resetButton;
+	}
+
+	public JLabel getFindLabel() {
+		return findLabel;
 	}
 }
