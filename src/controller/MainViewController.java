@@ -9,6 +9,7 @@ import java.util.TimerTask;
 import model.Graph;
 import model.algorithms.Algorithm;
 import model.algorithms.BFS;
+import model.algorithms.DFS;
 import model.algorithms.SearchAlgorithm;
 import persistency.GraphsParser;
 import utils.ActionUtils;
@@ -16,6 +17,8 @@ import utils.Dialog;
 import view.MainView;
 
 public class MainViewController {
+	
+	private static final int FIRE_RATE = 1000;
 
 	protected final MainView view;
 	protected ArrayList<Graph> graphs;
@@ -30,6 +33,7 @@ public class MainViewController {
 		this.graphs = new GraphsParser().parse();
 		this.algorithms = new ArrayList<Algorithm>();
 		this.algorithms.add(new BFS("BFS"));
+		this.algorithms.add(new DFS("DFS"));
 		this.ready = true;
 
 		ActionUtils.addListener(this.view.getStepButton(), this, "stepAlgorithm");
@@ -73,17 +77,14 @@ public class MainViewController {
 		if (graph != null) {
 			graph.reset();
 			this.view.getCanvas().setGraph(graph);
-//			Dialog.message("No graph selected!");
-//			return;
 		}
 		
 		Algorithm algorithm = this.view.getSelectedAlgorithm();
 		if (algorithm != null) {
 			algorithm.reset();
-//			Dialog.message("No algorithm selected!");
-//			return;
 		}
 		
+		this.view.setResultLabel("");
 		this.ready = true;
 	}
 	
@@ -119,6 +120,11 @@ public class MainViewController {
 			return;
 		}
 		
+		if (algorithm.isFinished()) {
+			Dialog.message("Algorithm already finished");
+			return;
+		}
+		
 		if (algorithm instanceof SearchAlgorithm) {
 			final SearchAlgorithm searchAlgorithm = (SearchAlgorithm) algorithm;
 
@@ -132,15 +138,16 @@ public class MainViewController {
 				public void run() {
 					if (searchAlgorithm.getResult() != null) {
 						view.setResultLabel(String.format("%d", searchAlgorithm.getResult()));
-						ready = false;
+					} 
+					if (searchAlgorithm.isFinished()) {
 						this.cancel();
 						return;
-					} 
+					}
 					
 					searchAlgorithm.run();
 					view.getCanvas().repaint();
 				}
-			}, 0, 1000);	
+			}, 0, FIRE_RATE);	
 		}
 	}
 	
@@ -168,6 +175,11 @@ public class MainViewController {
 			return;
 		}
 		
+		if (algorithm.isFinished()) {
+			Dialog.message("Algorithm already finished");
+			return;
+		}
+		
 		if (algorithm instanceof SearchAlgorithm) {
 			SearchAlgorithm searchAlgorithm = (SearchAlgorithm) algorithm;
 
@@ -181,7 +193,6 @@ public class MainViewController {
 
 			if (searchAlgorithm.getResult() != null) {
 				this.view.setResultLabel(String.format("%d", searchAlgorithm.getResult()));
-				this.ready = false;
 			} 
 		}
 	}

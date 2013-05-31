@@ -17,6 +17,7 @@ public abstract class SearchAlgorithm extends Algorithm {
 	public void reset() {
 		this.result = null;
 		this.initialized = false;
+		this.finished = false;
 	}
 	
 	public void initialize(String find, Graph graph) {

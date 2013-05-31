@@ -11,6 +11,7 @@ public class Vertex extends GraphComponent {
 
 	private Coordinate position;
 	private double radius;
+	private Vertex parent;
 	
 	/**
 	 * @param name
@@ -33,7 +34,7 @@ public class Vertex extends GraphComponent {
     	
 		if (this.attribute != null && !this.attribute.equals("")) {
 	    	GraphicsUtils.drawText(g, this.color, new Font("Verdana", Font.PLAIN, 10),
-	    			this.attribute, this.position, new Coordinate(0, 0));
+	    			this.attribute, this.position, new Coordinate(-3, 0));
 		}
     }
 
@@ -41,6 +42,7 @@ public class Vertex extends GraphComponent {
     	this.color = Color.lightGray;
     	this.visisted = false;
     	this.attribute = null;
+    	this.parent = null;
     }
 	
 	@Override
@@ -62,6 +64,14 @@ public class Vertex extends GraphComponent {
 
 	public void setRadius(int radius) {
 		this.radius = radius;
+	}
+
+	public Vertex getParent() {
+		return parent;
+	}
+
+	public void setParent(Vertex parent) {
+		this.parent = parent;
 	}
 	
 }

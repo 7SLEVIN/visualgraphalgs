@@ -40,7 +40,7 @@ public abstract class GraphComponent extends JComponent {
 		this.color = color;
 	}
 
-	public boolean isVisisted() {
+	public boolean isVisited() {
 		return visisted;
 	}
 	

@@ -1,7 +1,6 @@
 package model.algorithms;
 
 import model.Graph;
-import model.exception.AlgorithmFinishedException;
 
 
 abstract public class Algorithm implements Runnable {
@@ -9,6 +8,7 @@ abstract public class Algorithm implements Runnable {
 	protected String name;
 	protected Graph graph;
 	protected boolean initialized;
+	protected boolean finished;
 	
 	/**
 	 * @param name
@@ -32,6 +32,10 @@ abstract public class Algorithm implements Runnable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public boolean isFinished() {
+		return finished;
 	}
 	
 

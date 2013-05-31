@@ -52,15 +52,13 @@ public class BFS extends SearchAlgorithm {
 
 	@Override
 	protected void iterate() {
-		if (this.result != null) System.err.println("WARNING: Algorithm already finished");
-		
 		// Go through neighbours
 		if (this.edges != null && !this.edges.isEmpty()) {
 			Edge edge = this.edges.remove();
 			
 			Vertex toVertex = edge.getTo();
 			
-			if (!toVertex.isVisisted()) {
+			if (!toVertex.isVisited()) {
 				toVertex.visit();
 				toVertex.setAttribute(String.valueOf(Integer.parseInt(this.currentVertex.getAttribute())+1));
 
@@ -94,7 +92,6 @@ public class BFS extends SearchAlgorithm {
 		}
 		
 		this.edges = new PriorityQueue<Edge>(found.size(), new EdgeComparator());
-		
 		for (Edge edge : found) {
 			this.edges.add(edge);
 		}

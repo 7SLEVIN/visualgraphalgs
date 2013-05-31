@@ -28,9 +28,6 @@ public class Edge extends GraphComponent {
 
 	@Override
 	public void paintComponent(Graphics g) {
-//		GraphicsUtils.drawLine(g, this.color, this.from.getPosition(), this.to.getPosition(), 
-//				new Coordinate(this.from.getRadius(), this.from.getRadius()));
-		
 		double radius = this.from.getRadius();
 		
 //		double length = this.to.getPosition().length(this.from.getPosition()) - radius;
