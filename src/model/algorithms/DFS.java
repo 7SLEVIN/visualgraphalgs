@@ -5,9 +5,10 @@ import java.util.ArrayList;
 import java.util.PriorityQueue;
 import java.util.Stack;
 
-import utils.EdgeComparator;
 
 import model.Edge;
+import model.EdgeComparator;
+import model.EdgeComparatorType;
 import model.Graph;
 import model.Vertex;
 
@@ -18,8 +19,8 @@ public class DFS extends SearchAlgorithm {
 	private Vertex currentVertex;
 	private int depth;
 
-	public DFS(String name) {
-		super(name);
+	public DFS() {
+		super("DFS");
 
 		this.stack = new Stack<Vertex>();
 	}
@@ -111,7 +112,7 @@ public class DFS extends SearchAlgorithm {
 			return;
 		}
 		
-		this.edges = new PriorityQueue<Edge>(found.size(), new EdgeComparator());
+		this.edges = new PriorityQueue<Edge>(found.size(), new EdgeComparator(EdgeComparatorType.Name));
 		for (Edge edge : found) {
 			if (!edge.getTo().isVisited()) this.edges.add(edge);
 		}

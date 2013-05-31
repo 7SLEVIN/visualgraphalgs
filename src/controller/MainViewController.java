@@ -10,6 +10,7 @@ import model.Graph;
 import model.algorithms.Algorithm;
 import model.algorithms.BFS;
 import model.algorithms.DFS;
+import model.algorithms.Kruskal;
 import model.algorithms.SearchAlgorithm;
 import persistency.GraphsParser;
 import utils.ActionUtils;
@@ -32,8 +33,9 @@ public class MainViewController {
 		this.view = view;
 		this.graphs = new GraphsParser().parse();
 		this.algorithms = new ArrayList<Algorithm>();
-		this.algorithms.add(new BFS("BFS"));
-		this.algorithms.add(new DFS("DFS"));
+		this.algorithms.add(new BFS());
+		this.algorithms.add(new DFS());
+		this.algorithms.add(new Kruskal());
 		this.ready = true;
 
 		ActionUtils.addListener(this.view.getStepButton(), this, "stepAlgorithm");

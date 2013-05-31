@@ -7,9 +7,10 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 
 import model.Edge;
+import model.EdgeComparator;
+import model.EdgeComparatorType;
 import model.Graph;
 import model.Vertex;
-import utils.EdgeComparator;
 
 public class BFS extends SearchAlgorithm {
 
@@ -20,8 +21,8 @@ public class BFS extends SearchAlgorithm {
 	/**
 	 * @param name
 	 */
-	public BFS(String name) {
-		super(name);
+	public BFS() {
+		super("BFS");
 
 		this.queue = new LinkedList<Vertex>();
 	}
@@ -91,7 +92,7 @@ public class BFS extends SearchAlgorithm {
 			return;
 		}
 		
-		this.edges = new PriorityQueue<Edge>(found.size(), new EdgeComparator());
+		this.edges = new PriorityQueue<Edge>(found.size(), new EdgeComparator(EdgeComparatorType.Name));
 		for (Edge edge : found) {
 			this.edges.add(edge);
 		}
