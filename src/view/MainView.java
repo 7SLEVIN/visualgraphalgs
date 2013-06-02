@@ -31,6 +31,7 @@ public class MainView extends JFrame {
 	private JLabel findLabel;
 	private JTextField findInput;
 	private JButton runButton;
+	private JButton stopButton;
 	private JButton stepButton;
 	private JButton resetButton;
 	private JLabel resultLabel;
@@ -57,6 +58,8 @@ public class MainView extends JFrame {
 		this.findInput.setVisible(false);
 		this.stepButton = new JButton("Step");
 		this.runButton = new JButton("Run");
+		this.stopButton = new JButton("Stop");
+		this.stopButton.setVisible(false);
 		this.resetButton = new JButton("Reset");
 		graphPanel.add(new JLabel("Graph:"));
 		graphPanel.add(this.graphComboBox);
@@ -66,6 +69,7 @@ public class MainView extends JFrame {
 		graphPanel.add(this.findInput);
 		graphPanel.add(this.stepButton);
 		graphPanel.add(this.runButton);
+		graphPanel.add(this.stopButton);
 		graphPanel.add(this.resetButton);
 		this.getContentPane().add(graphPanel, BorderLayout.NORTH);
 		
@@ -131,5 +135,9 @@ public class MainView extends JFrame {
 
 	public JButton getRunButton() {
 		return runButton;
+	}
+
+	public JButton getStopButton() {
+		return stopButton;
 	}
 }

@@ -31,9 +31,11 @@ public class MainViewController {
 	
 	private static final int FIRE_RATE = 1000;
 
-	protected final MainView view;
-	protected ArrayList<Graph> graphs;
-	protected ArrayList<Algorithm> algorithms;
+	private final MainView view;
+	private ArrayList<Graph> graphs;
+	private ArrayList<Algorithm> algorithms;
+	private TimerTask timerTask;
+	
 //	private boolean ready;
 
 	/**
@@ -50,6 +52,7 @@ public class MainViewController {
 
 //		ActionUtils.addActionListener(this.view.getStepButton(), this, "stepAlgorithm");
 //		ActionUtils.addActionListener(this.view.getRunButton(), this, "runAlgorithm");
+		ActionUtils.addActionListener(this.view.getStopButton(), this, "stopAlgorithm");
 		ActionUtils.addActionListener(this.view.getResetButton(), this, "reset");
 		this.view.getStepButton().addActionListener(new ActionListener() {
 			@Override
@@ -190,18 +193,21 @@ public class MainViewController {
 				this.view.setResultLabel(String.format("%d", algorithm.getResult()));
 			}
 		} else {
-			new Timer().scheduleAtFixedRate(new TimerTask() {
+			setUIEnabled(false);
+			
+			this.timerTask = new TimerTask() {
 				@Override
 				public void run() {
 					if (algorithm.getResult() != null) {
 						view.setResultLabel(String.format("%d", algorithm.getResult()));
 					} 
-					if (algorithm.getState() == AlgorithmState.Finished) {
+					if (algorithm.getState() == AlgorithmState.Initialized) {
+						view.getStopButton().setVisible(true);
+					} else if (algorithm.getState() == AlgorithmState.Finished) {
 						this.cancel();
 						setUIEnabled(true);
 						return;
 					}
-					setUIEnabled(false);
 					
 					try {
 						algorithm.run();
@@ -213,7 +219,8 @@ public class MainViewController {
 					}
 					view.getCanvas().repaint();
 				}
-			}, 0, FIRE_RATE);
+			};
+			new Timer().scheduleAtFixedRate(this.timerTask, 0, FIRE_RATE);
 		}
 		
 		if (algorithm.getState() == AlgorithmState.Clean ||
@@ -227,6 +234,12 @@ public class MainViewController {
 		this.view.getStepButton().setEnabled(editable);
 		this.view.getRunButton().setEnabled(editable);
 		this.view.getResetButton().setEnabled(editable);
+	}
+	
+	public void stopAlgorithm() {
+		this.timerTask.cancel();
+		this.view.getStopButton().setVisible(false);
+		this.setUIEnabled(true);
 	}
 
 }
