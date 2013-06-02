@@ -29,7 +29,7 @@
 		<edge from="I" to="H" />
 		<edge from="J" to="F" />
 	</graph>
-	<graph name="Strong">
+	<graph name="Weighted" attributeType="Weighted">
 		<vertex name="A" x="100" y="100" />
 		<vertex name="B" x="200" y="300" />
 		<vertex name="C" x="300" y="200" />

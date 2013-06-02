@@ -19,11 +19,21 @@ public class Edge extends GraphComponent {
 	 * @param to
 	 */
 	public Edge(Vertex from, Vertex to) {
+		this(from, to, null);
+	}
+
+	/**
+	 * @param from
+	 * @param to
+	 * @param attribute
+	 */
+	public Edge(Vertex from, Vertex to, String attribute) {
 		super("");
 
 		this.from = from;
 		this.to = to;
 		this.color = Color.black;
+		this.attribute = attribute;
 	}
 
 	@Override

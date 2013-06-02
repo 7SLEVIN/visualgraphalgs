@@ -11,6 +11,7 @@ import model.EdgeComparator;
 import model.EdgeComparatorType;
 import model.Graph;
 import model.Vertex;
+import exceptions.GraphComponentException;
 
 public class BFS extends SearchAlgorithm {
 
@@ -19,16 +20,15 @@ public class BFS extends SearchAlgorithm {
 	private Vertex currentVertex;
 
 	/**
-	 * @param name
+	 * 
 	 */
 	public BFS() {
 		super("BFS");
-
 		this.queue = new LinkedList<Vertex>();
 	}
 	
 	@Override
-	public void initialize(String find, Graph graph) {
+	public void initialize(String find, Graph graph) throws GraphComponentException {
 		super.initialize(find, graph);
 		
 		this.currentVertex = graph.getFirst();
@@ -39,20 +39,7 @@ public class BFS extends SearchAlgorithm {
 	}
 
 	@Override
-	public void run() {
-		if (this.result != null) {
-			System.err.println("WARNING: Algorithm already finished");
-			return;
-		} else if (!this.initialized) {
-			System.err.println("WARNING: Algorithm not initialized");
-			return;
-		}
-		
-		this.iterate();
-	}
-
-	@Override
-	protected void iterate() {
+	protected void iterate() throws GraphComponentException {
 		// Go through neighbours
 		if (this.edges != null && !this.edges.isEmpty()) {
 			Edge edge = this.edges.remove();
@@ -65,6 +52,7 @@ public class BFS extends SearchAlgorithm {
 
 				this.queue.add(toVertex);
 				
+				// Correct found
 				if (toVertex.getName().equalsIgnoreCase(this.find)) {
 					toVertex.setColor(Color.green);
 					this.result = Integer.parseInt(toVertex.getAttribute());
@@ -78,7 +66,8 @@ public class BFS extends SearchAlgorithm {
 		
 		// Graph covered without finding anything
 		if (this.queue.isEmpty()) {
-			this.result = 0;
+			if (this.result == null) this.result = 0;
+			this.state = AlgorithmState.Finished;
 			return;
 		}
 

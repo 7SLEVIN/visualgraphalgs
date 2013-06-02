@@ -1,11 +1,11 @@
 package model.algorithms;
 
+import exceptions.GraphComponentException;
 import model.Graph;
 
 public abstract class SearchAlgorithm extends Algorithm {
-	
+
 	protected String find;
-	protected Integer result;
 
 	/**
 	 * @param name
@@ -13,21 +13,18 @@ public abstract class SearchAlgorithm extends Algorithm {
 	public SearchAlgorithm(String name) {
 		super(name);
 	}
-	
+
+	@Override
 	public void reset() {
-		this.result = null;
-		this.initialized = false;
-		this.finished = false;
-	}
-	
-	public void initialize(String find, Graph graph) {
-		this.find = find;
-		this.graph = graph;
-		this.initialized = true;
+		super.reset();
+		this.find = null;
 	}
 
-	public Integer getResult() {
-		return result;
+	public void initialize(String find, Graph graph)
+			throws GraphComponentException {
+		this.find = find;
+		this.graph = graph;
+		this.state = AlgorithmState.Initialized;
 	}
 
 }

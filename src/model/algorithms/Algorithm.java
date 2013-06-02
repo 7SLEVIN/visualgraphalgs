@@ -1,29 +1,50 @@
 package model.algorithms;
 
+import exceptions.AlgorithmAlreadyFinishedException;
+import exceptions.AlgorithmException;
+import exceptions.AlgorithmNotInitializedException;
+import exceptions.GraphComponentException;
 import model.Graph;
 
 
-abstract public class Algorithm implements Runnable {
+abstract public class Algorithm {
 	
 	protected String name;
 	protected Graph graph;
-	protected boolean initialized;
-	protected boolean finished;
+	protected Integer result;
+	protected AlgorithmState state;
 	
 	/**
 	 * @param name
 	 */
 	public Algorithm(String name) {
 		this.name = name;
-		this.initialized = false;
+		this.state = AlgorithmState.Clean;
 	}
 	
-	abstract protected void iterate();
-	
-	abstract public void reset();
+	abstract protected void iterate() throws GraphComponentException;
 
-	public boolean isInitialized() {
-		return initialized;
+	public void run() throws AlgorithmException {
+		if (this.state == AlgorithmState.Clean) throw new AlgorithmNotInitializedException();
+		if (this.state == AlgorithmState.Finished) throw new AlgorithmAlreadyFinishedException();
+
+		// Thread
+		new Runnable() {
+			@Override
+			public void run() {
+				try {
+					iterate();
+				} catch (GraphComponentException e) {
+					e.printStackTrace();
+				}
+			}
+		}.run();
+	}
+	
+	public void reset() {
+		this.graph = null;
+		this.result = null;
+		this.state = AlgorithmState.Clean;
 	}
 
 	public String getName() {
@@ -34,9 +55,12 @@ abstract public class Algorithm implements Runnable {
 		this.name = name;
 	}
 
-	public boolean isFinished() {
-		return finished;
+	public Integer getResult() {
+		return result;
 	}
-	
+
+	public AlgorithmState getState() {
+		return state;
+	}
 
 }

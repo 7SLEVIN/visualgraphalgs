@@ -4,9 +4,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
+import exceptions.GraphComponentException;
+import exceptions.UnsupportedGraphComponentException;
+
 public class Graph {
 	
 	private String name;
+	private GraphAttributeType attributeType;
 	private HashMap<String, Vertex> vertices;
 	private HashMap<Vertex, Collection<Edge>> edges;
 	private Vertex first;
@@ -15,7 +19,16 @@ public class Graph {
 	 * @param name
 	 */
 	public Graph(String name) {
+		this(name, GraphAttributeType.None);
+	}
+	
+	/**
+	 * @param name
+	 * @param attributeType
+	 */
+	public Graph(String name, GraphAttributeType attributeType) {
 		this.name = name;
+		this.attributeType = attributeType;
 		this.vertices = new HashMap<String, Vertex>();
 		this.edges = new HashMap<Vertex, Collection<Edge>>();
 	}
@@ -32,7 +45,12 @@ public class Graph {
 		return edges;
 	}
 
-	public void addEdge(Edge edge) {
+	public void addEdge(Edge edge) throws GraphComponentException {
+		if (edge.attribute == null &&
+				this.attributeType == GraphAttributeType.Weighted) {
+			throw new UnsupportedGraphComponentException("Cannot add unweighted edge to weighted graph", edge);
+		}
+		
 		Collection<Edge> values = this.edges.get(edge.getFrom());
 		if (values == null) {
 			values = new ArrayList<Edge>();
@@ -76,6 +94,10 @@ public class Graph {
 		for (Vertex vertex : this.getVertices().values()) {
 			vertex.reset();
 		}
+	}
+
+	public GraphAttributeType getAttributeType() {
+		return attributeType;
 	}
 	
 }

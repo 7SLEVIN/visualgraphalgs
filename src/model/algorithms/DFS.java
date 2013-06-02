@@ -5,15 +5,15 @@ import java.util.ArrayList;
 import java.util.PriorityQueue;
 import java.util.Stack;
 
-
 import model.Edge;
 import model.EdgeComparator;
 import model.EdgeComparatorType;
 import model.Graph;
 import model.Vertex;
+import exceptions.GraphComponentException;
 
 public class DFS extends SearchAlgorithm {
-	
+
 	private Stack<Vertex> stack;
 	private PriorityQueue<Edge> edges;
 	private Vertex currentVertex;
@@ -24,45 +24,33 @@ public class DFS extends SearchAlgorithm {
 
 		this.stack = new Stack<Vertex>();
 	}
-	
+
 	@Override
-	public void initialize(String find, Graph graph) {
+	public void initialize(String find, Graph graph)
+			throws GraphComponentException {
 		super.initialize(find, graph);
-		
+
 		this.currentVertex = graph.getFirst();
 		this.currentVertex.visit();
 		this.depth = 1;
 		this.setAttribute(this.currentVertex);
-				
+
 		this.stack.push(this.currentVertex);
 	}
 
 	@Override
-	public void run() {
-		if (this.finished) {
-			System.err.println("WARNING: Algorithm already finished");
-			return;
-		} else if (!this.initialized) {
-			System.err.println("WARNING: Algorithm not initialized");
-			return;
-		}
-		
-		this.iterate();
-	}
+	protected void iterate() throws GraphComponentException {
 
-	@Override
-	protected void iterate() {
-				
 		System.out.println("Current: " + this.currentVertex.getName());
-		
+
 		// Go through neighbours
 		if (this.edges != null && !this.edges.isEmpty()) {
 			Edge edge = this.edges.remove();
-			
+
 			Vertex toVertex = edge.getTo();
-			
+
 			System.out.println("Current edge: " + toVertex.getName());
-			
+
 			// Visit
 			if (!toVertex.isVisited()) {
 				toVertex.visit();
@@ -70,9 +58,9 @@ public class DFS extends SearchAlgorithm {
 
 				this.stack.push(toVertex);
 				toVertex.setParent(this.currentVertex);
-				
+
 				this.edges.clear();
-				
+
 				// Check if correct
 				if (toVertex.getName().equalsIgnoreCase(this.find)) {
 					toVertex.setColor(Color.green);
@@ -86,24 +74,26 @@ public class DFS extends SearchAlgorithm {
 				return;
 			}
 		}
-		
+
 		// Graph covered without finding anything
 		if (this.stack.isEmpty()) {
 			System.out.println("Stack empty");
-			this.result = 0;
-			return;
-		} 
-		
-		// Populate queue with neighbours
-		this.currentVertex = this.stack.pop();
-		
-		// Back at start
-		if (this.currentVertex == null) {
-			this.finished = true;
+			if (this.result == null) this.result = 0;
+			this.state = AlgorithmState.Finished;
 			return;
 		}
-		
-		ArrayList<Edge> found = graph.getEdges(this.currentVertex); 
+
+		// Populate queue with neighbours
+		this.currentVertex = this.stack.pop();
+
+		// Back at start
+		if (this.currentVertex == null) {
+			if (this.result == null) this.result = 0;
+			this.state = AlgorithmState.Finished;
+			return;
+		}
+
+		ArrayList<Edge> found = graph.getEdges(this.currentVertex);
 		if (found == null) {
 			System.out.println("No edges found");
 			this.stack.push(this.currentVertex.getParent());
@@ -111,10 +101,12 @@ public class DFS extends SearchAlgorithm {
 			this.iterate(); // no edges
 			return;
 		}
-		
-		this.edges = new PriorityQueue<Edge>(found.size(), new EdgeComparator(EdgeComparatorType.Name));
+
+		this.edges = new PriorityQueue<Edge>(found.size(), new EdgeComparator(
+				EdgeComparatorType.Name));
 		for (Edge edge : found) {
-			if (!edge.getTo().isVisited()) this.edges.add(edge);
+			if (!edge.getTo().isVisited())
+				this.edges.add(edge);
 		}
 		if (this.edges.isEmpty()) {
 			this.stack.push(this.currentVertex.getParent());
@@ -127,18 +119,19 @@ public class DFS extends SearchAlgorithm {
 	public void reset() {
 		super.reset();
 		this.stack.clear();
-		if (this.edges != null) this.edges.clear();
+		if (this.edges != null)
+			this.edges.clear();
 		this.depth = 0;
 		this.currentVertex = null;
 	}
-	
+
 	private void setAttribute(Vertex vertex) {
 		if (vertex.getAttribute() == null) {
 			vertex.setAttribute(String.format("%d/", this.depth));
 		} else {
 			this.depth--;
 			String old = vertex.getAttribute();
-			vertex.setAttribute(String.format("%s%d", old, this.depth+1));
+			vertex.setAttribute(String.format("%s%d", old, this.depth + 1));
 			this.depth++;
 		}
 		this.depth++;

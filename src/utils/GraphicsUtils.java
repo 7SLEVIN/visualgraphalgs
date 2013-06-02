@@ -20,6 +20,8 @@ public class GraphicsUtils {
 			Coordinate from, Coordinate to, Coordinate offset) {
         Graphics2D g2 = (Graphics2D) g.create();
 
+        g2.setColor(color);
+        
         double dx = to.x - from.x, dy = to.y - from.y;
         double angle = Math.atan2(dy, dx);
         int len = (int) Math.sqrt(dx*dx + dy*dy);

@@ -18,6 +18,15 @@ public class Vertex extends GraphComponent {
 	 * @param position
 	 */
 	public Vertex(String name, Coordinate position) {
+		this(name, position, null);
+	}
+	
+	/**
+	 * @param name
+	 * @param position
+	 * @param attribute
+	 */
+	public Vertex(String name, Coordinate position, String attribute) {
 		super(name);
 		
 		this.position = position;

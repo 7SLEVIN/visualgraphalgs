@@ -5,6 +5,8 @@ import java.awt.Graphics;
 
 import javax.swing.JComponent;
 
+import exceptions.GraphComponentAlreadyVisitedException;
+
 @SuppressWarnings("serial")
 public abstract class GraphComponent extends JComponent {
 	
@@ -44,11 +46,9 @@ public abstract class GraphComponent extends JComponent {
 		return visisted;
 	}
 	
-	public void visit() {
-		if (this.visisted) {
-			System.err.println(String.format("WARNING: GraphComponent %s already visited",
-					this.name));
-		}
+	public void visit() throws GraphComponentAlreadyVisitedException {
+		if (this.visisted) throw new GraphComponentAlreadyVisitedException(this);
+		
 		this.visisted = true;
 		this.color = Color.red;
 	}

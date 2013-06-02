@@ -1,4 +1,4 @@
-package persistency;
+package model.persistency;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -14,11 +14,15 @@ import javax.xml.parsers.SAXParserFactory;
 import model.Coordinate;
 import model.Edge;
 import model.Graph;
+import model.GraphAttributeType;
 import model.Vertex;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
+
+import exceptions.GraphComponentException;
+import exceptions.MalformedGraphException;
 
 public class GraphsParser extends DefaultHandler {
 
@@ -72,24 +76,54 @@ public class GraphsParser extends DefaultHandler {
         if (idx >= 0) current = this.graphs.get(idx);
         
         if (qName.equals("graph")) {
-			this.graphs.add(new Graph(atts.getValue("name")));
+        	String name = atts.getValue("name");
+        	if (name == null || name.equals("")) {
+				try {
+					throw new MalformedGraphException("Graph with no name");
+				} catch (MalformedGraphException e) {
+					e.printStackTrace();
+				}
+        	}
+        	
+        	GraphAttributeType attributeType = null;
+        	if (atts.getValue("attributeType") == null) {
+        		attributeType = GraphAttributeType.None;
+        	} else if (atts.getValue("attributeType").equals("Weighted")) {
+        		attributeType = GraphAttributeType.Weighted;
+        	} else {
+        		try {
+					throw new MalformedGraphException(String.format("Unkown GraphAttributeTrype %s",
+							atts.getValue("attributeType")));
+				} catch (MalformedGraphException e) {
+					e.printStackTrace();
+				}
+        	}
+        	
+			this.graphs.add(new Graph(atts.getValue("name"), attributeType));
+			
         } else if (qName.equals("vertex")) {
 			Vertex vertex = new Vertex(atts.getValue("name"), new Coordinate(
 					Double.parseDouble(atts.getValue("x")), 
 					Double.parseDouble(atts.getValue("y"))));
-			current.addVertex(vertex);
 			String attribute = atts.getValue("attribute");
 			if (attribute != null && !attribute.equals("")) {
 				vertex.setAttribute(attribute);
 			}
+			current.addVertex(vertex);
+			
         } else if (qName.equals("edge")) {
 			Vertex from = current.getVertex(atts.getValue("from"));
 			Vertex to = current.getVertex(atts.getValue("to"));
 			Edge edge = new Edge(from, to);
-			current.addEdge(edge);
 			String attribute = atts.getValue("attribute");
 			if (attribute != null && !attribute.equals("")) {
 				edge.setAttribute(attribute);
+			}
+			
+			try {
+				current.addEdge(edge);
+			} catch (GraphComponentException e) {
+				e.printStackTrace();
 			}
         }
     }

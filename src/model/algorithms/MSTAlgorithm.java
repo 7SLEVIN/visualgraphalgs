@@ -1,10 +1,11 @@
 package model.algorithms;
 
+import exceptions.GraphException;
+import exceptions.UnsupportedGraphException;
 import model.Graph;
+import model.GraphAttributeType;
 
 public abstract class MSTAlgorithm extends Algorithm {
-	
-	protected Integer result;
 
 	/**
 	 * @param name
@@ -13,19 +14,12 @@ public abstract class MSTAlgorithm extends Algorithm {
 		super(name);
 	}
 	
-	public void reset() {
-		this.result = null;
-		this.initialized = false;
-		this.finished = false;
-	}
-	
-	public void initialize(Graph graph) {
+	public void initialize(Graph graph) throws GraphException {
+		if (graph.getAttributeType() != GraphAttributeType.Weighted) {
+			throw new UnsupportedGraphException("Cannot initialize MSTAlgorithm with unweighted graph", graph);
+		}
 		this.graph = graph;
-		this.initialized = true;
-	}
-
-	public Integer getResult() {
-		return result;
+		this.state = AlgorithmState.Initialized;
 	}
 
 }
