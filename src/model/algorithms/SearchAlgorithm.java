@@ -1,7 +1,7 @@
 package model.algorithms;
 
 import exceptions.GraphComponentException;
-import model.Graph;
+import model.elements.Graph;
 
 public abstract class SearchAlgorithm extends Algorithm {
 

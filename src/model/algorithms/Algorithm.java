@@ -4,14 +4,15 @@ import exceptions.AlgorithmAlreadyFinishedException;
 import exceptions.AlgorithmException;
 import exceptions.AlgorithmNotInitializedException;
 import exceptions.GraphComponentException;
-import model.Graph;
+import exceptions.GraphException;
+import model.elements.Graph;
 
 
 abstract public class Algorithm {
 	
 	protected String name;
 	protected Graph graph;
-	protected Integer result;
+	protected String result;
 	protected AlgorithmState state;
 	
 	/**
@@ -22,7 +23,7 @@ abstract public class Algorithm {
 		this.state = AlgorithmState.Clean;
 	}
 	
-	abstract protected void iterate() throws GraphComponentException;
+	abstract protected void iterate() throws GraphComponentException, GraphException, AlgorithmException;
 
 	public void run() throws AlgorithmException {
 		if (this.state == AlgorithmState.Clean) throw new AlgorithmNotInitializedException();
@@ -34,7 +35,7 @@ abstract public class Algorithm {
 			public void run() {
 				try {
 					iterate();
-				} catch (GraphComponentException e) {
+				} catch (GraphComponentException | GraphException | AlgorithmException e) {
 					e.printStackTrace();
 				}
 			}
@@ -55,7 +56,7 @@ abstract public class Algorithm {
 		this.name = name;
 	}
 
-	public Integer getResult() {
+	public String getResult() {
 		return result;
 	}
 

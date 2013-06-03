@@ -1,8 +1,10 @@
-package model;
+package model.elements;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+
+import model.Coordinate;
 
 import utils.GraphicsUtils;
 
@@ -92,4 +94,8 @@ public class Edge extends GraphComponent {
 		this.to = to;
 	}
 
+	@Override
+	public Edge clone() {
+		return new Edge(this.from, this.to, this.attribute);
+	}
 }

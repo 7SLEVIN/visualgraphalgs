@@ -1,9 +1,10 @@
 package model.algorithms;
 
+import exceptions.GraphComponentException;
 import exceptions.GraphException;
 import exceptions.UnsupportedGraphException;
-import model.Graph;
-import model.GraphAttributeType;
+import model.elements.Graph;
+import model.elements.GraphAttributeType;
 
 public abstract class MSTAlgorithm extends Algorithm {
 
@@ -14,7 +15,8 @@ public abstract class MSTAlgorithm extends Algorithm {
 		super(name);
 	}
 	
-	public void initialize(Graph graph) throws GraphException {
+	public void initialize(Graph graph) throws GraphException,
+			GraphComponentException {
 		if (graph.getAttributeType() != GraphAttributeType.Weighted) {
 			throw new UnsupportedGraphException("Cannot initialize MSTAlgorithm with unweighted graph", graph);
 		}

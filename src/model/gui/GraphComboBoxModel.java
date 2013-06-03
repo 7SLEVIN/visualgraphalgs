@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import javax.swing.ComboBoxModel;
 import javax.swing.event.ListDataListener;
 
-import model.Graph;
+import model.elements.Graph;
 
 public class GraphComboBoxModel implements ComboBoxModel<Graph> {
 	

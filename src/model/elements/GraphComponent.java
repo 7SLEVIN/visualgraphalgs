@@ -1,4 +1,4 @@
-package model;
+package model.elements;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -38,10 +38,6 @@ public abstract class GraphComponent extends JComponent {
 		return color;
 	}
 
-	public void setColor(Color color) {
-		this.color = color;
-	}
-
 	public boolean isVisited() {
 		return visisted;
 	}
@@ -59,6 +55,10 @@ public abstract class GraphComponent extends JComponent {
 
 	public void setAttribute(String attribute) {
 		this.attribute = attribute;
+	}
+	
+	public void found() {
+		this.color = Color.green;
 	}
 
 }

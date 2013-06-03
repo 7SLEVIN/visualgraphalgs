@@ -1,15 +1,14 @@
 package model.algorithms;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 import java.util.Stack;
 
-import model.Edge;
 import model.EdgeComparator;
 import model.EdgeComparatorType;
-import model.Graph;
-import model.Vertex;
+import model.elements.Edge;
+import model.elements.Graph;
+import model.elements.Vertex;
 import exceptions.GraphComponentException;
 
 public class DFS extends SearchAlgorithm {
@@ -63,8 +62,8 @@ public class DFS extends SearchAlgorithm {
 
 				// Check if correct
 				if (toVertex.getName().equalsIgnoreCase(this.find)) {
-					toVertex.setColor(Color.green);
-					this.result = this.depth--;
+					toVertex.found();
+					this.result = String.valueOf(this.depth-1);
 					return;
 				}
 			} else {
@@ -78,7 +77,7 @@ public class DFS extends SearchAlgorithm {
 		// Graph covered without finding anything
 		if (this.stack.isEmpty()) {
 			System.out.println("Stack empty");
-			if (this.result == null) this.result = 0;
+			if (this.result == null) this.result = "0";
 			this.state = AlgorithmState.Finished;
 			return;
 		}
@@ -88,7 +87,7 @@ public class DFS extends SearchAlgorithm {
 
 		// Back at start
 		if (this.currentVertex == null) {
-			if (this.result == null) this.result = 0;
+			if (this.result == null) this.result = "0";
 			this.state = AlgorithmState.Finished;
 			return;
 		}

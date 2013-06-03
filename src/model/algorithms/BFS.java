@@ -1,16 +1,15 @@
 package model.algorithms;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
-import model.Edge;
 import model.EdgeComparator;
 import model.EdgeComparatorType;
-import model.Graph;
-import model.Vertex;
+import model.elements.Edge;
+import model.elements.Graph;
+import model.elements.Vertex;
 import exceptions.GraphComponentException;
 
 public class BFS extends SearchAlgorithm {
@@ -54,8 +53,8 @@ public class BFS extends SearchAlgorithm {
 				
 				// Correct found
 				if (toVertex.getName().equalsIgnoreCase(this.find)) {
-					toVertex.setColor(Color.green);
-					this.result = Integer.parseInt(toVertex.getAttribute());
+					toVertex.found();
+					this.result = toVertex.getAttribute();
 				}
 			} else {
 				this.iterate();
@@ -66,7 +65,7 @@ public class BFS extends SearchAlgorithm {
 		
 		// Graph covered without finding anything
 		if (this.queue.isEmpty()) {
-			if (this.result == null) this.result = 0;
+			if (this.result == null) this.result = "0";
 			this.state = AlgorithmState.Finished;
 			return;
 		}
@@ -92,8 +91,8 @@ public class BFS extends SearchAlgorithm {
 	@Override
 	public void reset() {
 		super.reset();
-		this.queue.clear();
-		this.edges.clear();
+		if (this.queue != null) this.queue.clear();
+		if (this.edges != null) this.edges.clear();
 		this.currentVertex = null;
 	}
 	

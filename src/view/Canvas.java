@@ -1,13 +1,12 @@
 package view;
 
 import java.awt.Graphics;
-import java.util.Collection;
 
 import javax.swing.JPanel;
 
-import model.Edge;
-import model.Graph;
-import model.Vertex;
+import model.elements.Edge;
+import model.elements.Graph;
+import model.elements.Vertex;
 
 @SuppressWarnings("serial")
 public class Canvas extends JPanel {
@@ -20,10 +19,8 @@ public class Canvas extends JPanel {
 		
 		if (this.graph == null) return;
 		
-		for (Collection<Edge> values : this.graph.getEdges().values()) {
-			for (Edge edge : values) {
-				edge.paintComponent(g);
-			}
+		for (Edge edge: this.graph.getEdgesAsList()) {
+			edge.paintComponent(g);
 		}
 		
 		for (Vertex vertex : this.graph.getVertices().values()) {

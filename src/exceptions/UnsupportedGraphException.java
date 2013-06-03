@@ -1,6 +1,6 @@
 package exceptions;
 
-import model.Graph;
+import model.elements.Graph;
 
 @SuppressWarnings("serial")
 public class UnsupportedGraphException extends GraphException {

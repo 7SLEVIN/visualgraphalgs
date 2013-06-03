@@ -11,8 +11,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import model.Graph;
 import model.algorithms.Algorithm;
+import model.elements.Graph;
 import model.gui.AlgorithmComboBoxModel;
 import model.gui.AlgorithmListRenderer;
 import model.gui.GraphComboBoxModel;
@@ -22,7 +22,7 @@ import model.gui.GraphListRenderer;
 @SuppressWarnings("serial")
 public class MainView extends JFrame {
 
-	public final static int WINDOW_WIDTH = 700;
+	public final static int WINDOW_WIDTH = 750;
 	public final static int WINDOW_HEIGHT = 450;
 	
 	private Canvas canvas;

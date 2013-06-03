@@ -30,12 +30,34 @@
 		<edge from="J" to="F" />
 	</graph>
 	<graph name="Weighted" attributeType="Weighted">
-		<vertex name="A" x="100" y="100" />
-		<vertex name="B" x="200" y="300" />
-		<vertex name="C" x="300" y="200" />
-		<edge from="A" to="B" attribute="4" />
-		<edge from="C" to="A" attribute="6" />
+		<vertex name="A" x="50" y="50" />
+		<vertex name="B" x="300" y="50" />
+		<vertex name="C" x="600" y="100" />
+		<vertex name="D" x="50" y="175" />
+		<vertex name="G" x="50" y="350" />
+		<vertex name="I" x="650" y="300" />
+		<vertex name="E" x="200" y="175" />
+		<vertex name="H" x="450" y="350" />
+		<vertex name="F" x="375" y="225" />
+		<edge from="A" to="B" attribute="3" />
+		<edge from="A" to="E" attribute="4" />
 		<edge from="B" to="C" attribute="2" />
+		<edge from="C" to="B" attribute="1" />
+		<edge from="C" to="I" attribute="12" />
+		<edge from="C" to="F" attribute="3" />
+		<edge from="D" to="A" attribute="1" />
+		<edge from="D" to="G" attribute="4" />
+		<edge from="E" to="B" attribute="2" />
+		<edge from="E" to="F" attribute="5" />
+		<edge from="E" to="G" attribute="8" />
+		<edge from="E" to="D" attribute="1" />
+		<edge from="F" to="E" attribute="1" />
+		<edge from="F" to="B" attribute="2" />
+		<edge from="F" to="H" attribute="7" />
+		<edge from="G" to="H" attribute="4" />
+		<edge from="H" to="I" attribute="1" />
+		<edge from="H" to="C" attribute="1" />
+		<edge from="H" to="I" attribute="1" />
 	</graph>
 	<graph name="Binary">
 		<vertex name="A" x="300" y="0" />
@@ -47,5 +69,29 @@
 		<edge from="A" to="C" />
 		<edge from="B" to="D" />
 		<edge from="B" to="E" />
+	</graph>
+	<graph name="Acyclic">
+		<vertex name="B" x="50" y="350" />
+		<vertex name="A" x="600" y="350" />
+		<vertex name="E" x="120" y="60" />
+		<vertex name="D" x="200" y="150" />
+		<vertex name="C" x="350" y="100" />
+		<vertex name="G" x="650" y="50" />
+		<vertex name="F" x="550" y="150" />
+		<vertex name="H" x="500" y="250" />
+		<edge from="B" to="E" />
+		<edge from="B" to="A" />
+		<edge from="B" to="C" />
+		<edge from="D" to="B" />
+		<edge from="D" to="E" />
+		<edge from="E" to="C" />
+		<edge from="E" to="G" />
+		<edge from="G" to="A" />
+		<edge from="G" to="F" />
+		<edge from="G" to="C" />
+		<edge from="C" to="H" />
+		<edge from="C" to="F" />
+		<edge from="H" to="A" />
+		<edge from="F" to="H" />
 	</graph>
 </graphs>

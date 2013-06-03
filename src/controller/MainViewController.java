@@ -14,7 +14,6 @@ import exceptions.GraphComponentException;
 import exceptions.GraphException;
 import exceptions.UnsupportedGraphException;
 
-import model.Graph;
 import model.algorithms.Algorithm;
 import model.algorithms.AlgorithmState;
 import model.algorithms.BFS;
@@ -22,6 +21,9 @@ import model.algorithms.DFS;
 import model.algorithms.Kruskal;
 import model.algorithms.MSTAlgorithm;
 import model.algorithms.SearchAlgorithm;
+import model.algorithms.SortAlgorithm;
+import model.algorithms.TopologicalSortAlgorithm;
+import model.elements.Graph;
 import model.persistency.GraphsParser;
 import utils.ActionUtils;
 import utils.Dialog;
@@ -48,10 +50,9 @@ public class MainViewController {
 		this.algorithms.add(new BFS());
 		this.algorithms.add(new DFS());
 		this.algorithms.add(new Kruskal());
+		this.algorithms.add(new TopologicalSortAlgorithm());
 //		this.ready = true;
 
-//		ActionUtils.addActionListener(this.view.getStepButton(), this, "stepAlgorithm");
-//		ActionUtils.addActionListener(this.view.getRunButton(), this, "runAlgorithm");
 		ActionUtils.addActionListener(this.view.getStopButton(), this, "stopAlgorithm");
 		ActionUtils.addActionListener(this.view.getResetButton(), this, "reset");
 		this.view.getStepButton().addActionListener(new ActionListener() {
@@ -68,12 +69,11 @@ public class MainViewController {
 		});
 
 		this.fillGraphs();
-		this.fillAlgorits();
+		this.fillAlgorithms();
 		
 		this.view.getGraphComboBox().setSelectedIndex(0);
 		this.view.getCanvas().setGraph(graphs.get(0));
 		
-//		ActionUtils.addItemListener(this.view.getGraphComboBox(), this, "setGraph", "e");
 		this.view.getGraphComboBox().addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
@@ -87,6 +87,7 @@ public class MainViewController {
 		this.view.getAlgoComboBox().addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
+				reset();
 				if (e.getStateChange() == ItemEvent.SELECTED) {
 					if (view.getSelectedAlgorithm() instanceof SearchAlgorithm) {
 						view.getFindLabel().setVisible(true);
@@ -117,7 +118,7 @@ public class MainViewController {
 //		this.ready = true;
 	}
 	
-	private void fillAlgorits() {
+	private void fillAlgorithms() {
 		this.view.setAlgorithms(this.algorithms);
 	}
 
@@ -150,7 +151,7 @@ public class MainViewController {
 //			return;
 		} 
 		
-		// Initiate
+		// Initialize
 		if (algorithm instanceof SearchAlgorithm) {
 			SearchAlgorithm searchAlgorithm = (SearchAlgorithm) algorithm;
 
@@ -162,15 +163,32 @@ public class MainViewController {
 				}	
 			}
 		} else if (algorithm instanceof MSTAlgorithm) {
-			MSTAlgorithm MSTAlgorithm = (MSTAlgorithm) algorithm;
+			MSTAlgorithm mstAlgorithm = (MSTAlgorithm) algorithm;
 
-			if (MSTAlgorithm.getState() == AlgorithmState.Clean) {
+			if (mstAlgorithm.getState() == AlgorithmState.Clean) {
 				try {
-					MSTAlgorithm.initialize(graph);
+					mstAlgorithm.initialize(graph);
 				} catch (UnsupportedGraphException e) {
 					Dialog.message("Graph must be weighted!");
 					return;
 				} catch (GraphException e) {
+					e.printStackTrace();
+				} catch (GraphComponentException e) {
+					e.printStackTrace();
+				}
+			}
+		} else if (algorithm instanceof SortAlgorithm) {
+			SortAlgorithm sortAlgorithm = (SortAlgorithm) algorithm;
+			
+			if (sortAlgorithm.getState() == AlgorithmState.Clean) {
+				try {
+					sortAlgorithm.initialize(graph);
+				} catch (UnsupportedGraphException e) {
+					Dialog.message("Graph must be directed!");
+					return;
+				} catch (GraphException e) {
+					e.printStackTrace();
+				} catch (GraphComponentException e) {
 					e.printStackTrace();
 				}
 			}
@@ -190,7 +208,7 @@ public class MainViewController {
 			this.view.getCanvas().repaint();	
 
 			if (algorithm.getResult() != null) {
-				this.view.setResultLabel(String.format("%d", algorithm.getResult()));
+				this.view.setResultLabel(algorithm.getResult());
 			}
 		} else {
 			setUIEnabled(false);
@@ -199,12 +217,13 @@ public class MainViewController {
 				@Override
 				public void run() {
 					if (algorithm.getResult() != null) {
-						view.setResultLabel(String.format("%d", algorithm.getResult()));
+						view.setResultLabel(algorithm.getResult());
 					} 
 					if (algorithm.getState() == AlgorithmState.Initialized) {
 						view.getStopButton().setVisible(true);
 					} else if (algorithm.getState() == AlgorithmState.Finished) {
 						this.cancel();
+						view.getStopButton().setVisible(false);
 						setUIEnabled(true);
 						return;
 					}

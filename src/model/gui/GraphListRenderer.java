@@ -6,7 +6,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
-import model.Graph;
+import model.elements.Graph;
 
 @SuppressWarnings("serial")
 public class GraphListRenderer extends JLabel implements ListCellRenderer<Graph> {

@@ -2,6 +2,8 @@ package model;
 
 import java.util.Comparator;
 
+import model.elements.Edge;
+
 import utils.StringUtils;
 
 
@@ -26,7 +28,7 @@ public class EdgeComparator implements Comparator<Edge> {
 				return 1;
 			}
 		} else if (this.type == EdgeComparatorType.Weight) {
-			if (Integer.parseInt(n1.getAttribute()) >= 
+			if (Integer.parseInt(n1.getAttribute()) <= 
 				Integer.parseInt(n2.getAttribute())) {
 				return -1;
 			} else {

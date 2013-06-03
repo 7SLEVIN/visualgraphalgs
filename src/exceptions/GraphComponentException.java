@@ -1,6 +1,6 @@
 package exceptions;
 
-import model.GraphComponent;
+import model.elements.GraphComponent;
 
 @SuppressWarnings("serial")
 public class GraphComponentException extends Exception {

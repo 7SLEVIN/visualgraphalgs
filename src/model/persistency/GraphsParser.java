@@ -10,18 +10,20 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-
 import model.Coordinate;
-import model.Edge;
-import model.Graph;
-import model.GraphAttributeType;
-import model.Vertex;
+import model.elements.Edge;
+import model.elements.Graph;
+import model.elements.GraphAttributeType;
+import model.elements.GraphType;
+import model.elements.Vertex;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import exceptions.AlgorithmException;
 import exceptions.GraphComponentException;
+import exceptions.GraphException;
 import exceptions.MalformedGraphException;
 
 public class GraphsParser extends DefaultHandler {
@@ -85,6 +87,18 @@ public class GraphsParser extends DefaultHandler {
 				}
         	}
         	
+        	GraphType type = null;
+        	if (atts.getValue("type") == null) {
+        		type = GraphType.Directed;
+        	} else {
+        		try {
+					throw new MalformedGraphException(String.format("Unkown GraphTrype %s",
+							atts.getValue("type")));
+				} catch (MalformedGraphException e) {
+					e.printStackTrace();
+				}
+        	}
+        	
         	GraphAttributeType attributeType = null;
         	if (atts.getValue("attributeType") == null) {
         		attributeType = GraphAttributeType.None;
@@ -99,7 +113,7 @@ public class GraphsParser extends DefaultHandler {
 				}
         	}
         	
-			this.graphs.add(new Graph(atts.getValue("name"), attributeType));
+			this.graphs.add(new Graph(atts.getValue("name"), type, attributeType));
 			
         } else if (qName.equals("vertex")) {
 			Vertex vertex = new Vertex(atts.getValue("name"), new Coordinate(
@@ -123,6 +137,10 @@ public class GraphsParser extends DefaultHandler {
 			try {
 				current.addEdge(edge);
 			} catch (GraphComponentException e) {
+				e.printStackTrace();
+			} catch (GraphException e) {
+				e.printStackTrace();
+			} catch (AlgorithmException e) {
 				e.printStackTrace();
 			}
         }

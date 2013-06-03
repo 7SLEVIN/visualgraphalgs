@@ -1,8 +1,10 @@
-package model;
+package model.elements;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+
+import model.Coordinate;
 
 import utils.GraphicsUtils;
 
@@ -83,4 +85,8 @@ public class Vertex extends GraphComponent {
 		this.parent = parent;
 	}
 	
+	@Override
+	public Vertex clone() {
+		return new Vertex(this.name, this.position, this.attribute);
+	}
 }
