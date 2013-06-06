@@ -20,6 +20,7 @@ public class GraphicsUtils {
 			Coordinate from, Coordinate to, Coordinate offset) {
         Graphics2D g2 = (Graphics2D) g.create();
 
+		g2.setStroke(new BasicStroke(2));
         g2.setColor(color);
         
         double dx = to.x - from.x, dy = to.y - from.y;
@@ -66,12 +67,14 @@ public class GraphicsUtils {
 	}
 	
 	public static void drawCircle(Graphics g, Color color, Coordinate position, double radius) {
-    	Graphics2D g2d = (Graphics2D) g;
-    	
+    	Graphics2D g2 = (Graphics2D) g;
+
+		g2.setStroke(new BasicStroke(2));
+		
     	Shape circle = new Ellipse2D.Double(position.x, position.y, radius*2, radius*2);
-    	g2d.draw(circle);
+    	g2.draw(circle);
     	
-    	g2d.setPaint(color);
-    	g2d.fill(circle);
+    	g2.setPaint(color);
+    	g2.fill(circle);
 	}
 }

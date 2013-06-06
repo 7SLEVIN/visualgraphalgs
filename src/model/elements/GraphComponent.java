@@ -60,5 +60,9 @@ public abstract class GraphComponent extends JComponent {
 	public void found() {
 		this.color = Color.green;
 	}
+	
+	public boolean isFound() {
+		return this.color == Color.green;
+	}
 
 }

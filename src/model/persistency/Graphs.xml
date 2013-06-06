@@ -57,7 +57,6 @@
 		<edge from="G" to="H" attribute="4" />
 		<edge from="H" to="I" attribute="1" />
 		<edge from="H" to="C" attribute="1" />
-		<edge from="H" to="I" attribute="1" />
 	</graph>
 	<graph name="Binary">
 		<vertex name="A" x="300" y="0" />

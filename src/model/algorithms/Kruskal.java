@@ -11,30 +11,33 @@ import model.elements.GraphAttributeType;
 import model.elements.GraphType;
 import model.elements.Vertex;
 import exceptions.AlgorithmException;
+import exceptions.CycleInAcyclicGraphException;
 import exceptions.GraphComponentException;
 import exceptions.GraphException;
 
 public class Kruskal extends MSTAlgorithm {
 
 	private PriorityQueue<Edge> edges;
-	
+
 	/**
 	 * 
 	 */
 	public Kruskal() {
 		super("Kruskal");
 	}
-	
+
 	@Override
-	public void initialize(Graph graph) 
-			throws GraphException, GraphComponentException {
+	public void initialize(Graph graph) throws GraphException,
+			GraphComponentException {
 		super.initialize(graph);
-		
+
 		// Sort edges by weight
-		this.edges = new PriorityQueue<Edge>(graph.getEdgesAsList().size(), new EdgeComparator(EdgeComparatorType.Weight));
+		this.edges = new PriorityQueue<Edge>(graph.getEdgesAsList().size(),
+				new EdgeComparator(EdgeComparatorType.Weight));
 		for (Vertex vertex : graph.getVertices().values()) {
 			Collection<Edge> found = graph.getEdges(vertex);
-			if (found == null) continue;
+			if (found == null)
+				continue;
 			for (Edge edge : found) {
 				this.edges.add(edge);
 			}
@@ -42,11 +45,13 @@ public class Kruskal extends MSTAlgorithm {
 	}
 
 	@Override
-	protected void iterate() throws GraphComponentException, GraphException, AlgorithmException {
+	protected void iterate() throws GraphComponentException, GraphException,
+			AlgorithmException {
 		// Finished if all vertices are visited forming a MST
 		boolean allVisited = true;
 		for (Vertex vertex : this.graph.getVertices().values()) {
-			if (!vertex.isVisited()) allVisited = false;
+			if (!vertex.isVisited())
+				allVisited = false;
 		}
 		if (allVisited) {
 			// Find value of MST
@@ -58,45 +63,87 @@ public class Kruskal extends MSTAlgorithm {
 				}
 			}
 			for (Vertex vertex : this.graph.getVertices().values()) {
-				if (vertex.isVisited()) vertex.found();
+				if (vertex.isVisited())
+					vertex.found();
 			}
 			// Set fields and return
 			this.result = String.valueOf(value);
 			this.state = AlgorithmState.Finished;
 			return;
 		}
-		
+
 		// Quit
 		if (this.edges.isEmpty()) {
-			if (this.result == null) this.result = "0";
+			if (this.result == null)
+				this.result = "0";
 			this.state = AlgorithmState.Finished;
 			return;
 		}
-		
+
+		// Take cheapest edge
 		Edge edge = this.edges.remove();
-		Graph graph = new Graph("Acyclic test", GraphType.DirectedAcyclic, GraphAttributeType.None);
-		for (Vertex vertex : this.graph.getVertices().values()) {
-			if (vertex.isVisited()) graph.addVertex(vertex);
-			Collection<Edge> found = graph.getEdges(vertex);
-			if (found == null) continue;
-			for (Edge e : found) {
-				if (e.isVisited()) graph.addEdge(e);
+		System.out.println(String.format("Current edge: %s->%s", edge.getFrom()
+				.getName(), edge.getTo().getName()));
+		Edge edgeClone = edge.clone();
+
+		// Create temporary graph with visited components
+		Graph graph = new Graph("Acyclic test", GraphType.DirectedAcyclic,
+				GraphAttributeType.None);
+		// Add cloned components
+		for (Edge e : this.graph.getEdgesAsList()) {
+			if (e.isVisited()) {
+				Edge clone = e.clone();
+				if (graph.getVertex(clone.getFrom().getName()) == null) {
+					graph.addVertex(clone.getFrom());					
+				} else {
+					clone.setFrom(graph.getVertex(clone.getFrom().getName()));
+				}
+				if (graph.getVertex(clone.getTo().getName()) == null) {
+					graph.addVertex(clone.getTo());					
+				} else {
+					clone.setTo(graph.getVertex(clone.getTo().getName()));
+				}
+				graph.addEdge(clone);
 			}
 		}
+
+		// Try to add edge and see if cycle occurs
 		try {
-			graph.addEdge(edge);
-			edge.visit();	
-			edge.getTo().visit();
-			edge.getFrom().visit();
-		} catch (GraphException e) {
+			if (graph.getVertex(edgeClone.getFrom().getName()) == null) {
+				graph.addVertex(edgeClone.getFrom());
+			} else {
+				edgeClone.setFrom(graph.getVertex(edgeClone.getFrom().getName()));
+			}
+			if (graph.getVertex(edgeClone.getTo().getName()) == null) {
+				graph.addVertex(edgeClone.getTo());
+			} else {
+				edgeClone.setTo(graph.getVertex(edgeClone.getTo().getName()));
+			}
+			
+			graph.addEdge(edgeClone);
+		} catch (CycleInAcyclicGraphException e) {
 			// Didn't work out.
+			System.out.println("Cycle occured ----------------");
+			edge.reset();
+			this.iterate();
+			return;
 		}
+
+		// Did work out!
+		System.out.println("Edge added!");
+		edge.visit();
+		if (!edge.getTo().isVisited())
+			edge.getTo().visit();
+		if (!edge.getFrom().isVisited())
+			edge.getFrom().visit();
 	}
-	
+
 	@Override
 	public void reset() {
 		super.reset();
-		if (this.edges != null) this.edges.clear();
+		if (this.edges != null)
+			this.edges.clear();
 	}
+	
 
 }

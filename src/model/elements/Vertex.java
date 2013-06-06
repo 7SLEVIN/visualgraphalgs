@@ -11,6 +11,8 @@ import utils.GraphicsUtils;
 @SuppressWarnings("serial")
 public class Vertex extends GraphComponent {
 
+	public static final int VERTEX_RADIUS = 20;
+	
 	private Coordinate position;
 	private double radius;
 	private Vertex parent;
@@ -32,16 +34,15 @@ public class Vertex extends GraphComponent {
 		super(name);
 		
 		this.position = position;
-		this.radius = 20;
 		this.color = Color.lightGray;
 	}
 	
     @Override
     public void paintComponent(Graphics g) {
-    	GraphicsUtils.drawCircle(g, this.color, this.position, this.radius);
+    	GraphicsUtils.drawCircle(g, this.color, this.position, VERTEX_RADIUS);
     	
     	GraphicsUtils.drawText(g, this.color, new Font("Verdana", Font.PLAIN, 20),
-    			this.name, this.position, new Coordinate(this.radius, this.radius));
+    			this.name, this.position, new Coordinate(VERTEX_RADIUS, VERTEX_RADIUS));
     	
 		if (this.attribute != null && !this.attribute.equals("")) {
 	    	GraphicsUtils.drawText(g, this.color, new Font("Verdana", Font.PLAIN, 10),

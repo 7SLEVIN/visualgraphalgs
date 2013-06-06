@@ -34,6 +34,7 @@ public class TopologicalSortAlgorithm extends SortAlgorithm {
 		for (Vertex vertex : this.vertices.values()) {
 			vertex.reset();
 		}
+		
 		this.edges = (ArrayList<Edge>) graph.getEdgesAsList().clone();
 		for (Edge edge : this.edges) {
 			edge.reset();
@@ -48,20 +49,20 @@ public class TopologicalSortAlgorithm extends SortAlgorithm {
 			// Find ophan
 			Vertex orphan = null;
 			for (Vertex vertex : this.vertices.values()) {
-				ArrayList<Edge> found = new ArrayList<Edge>();
+				boolean noneFound = true;
 				for (Edge edge : this.edges) {
-					if (edge.getTo() == vertex) {
-						found.add(edge);
+					if (edge.getTo().getName().equals(vertex.getName())) {
+						noneFound = false;
 					}
 				}
-				if (found.isEmpty()) {
+				if (noneFound) {
 					orphan = vertex;
+					break;
 				}
 			}
 			
 			if (orphan == null) { // None found then quit
 				this.state = AlgorithmState.Finished;
-				return;
 			} else { // Add to sorted
 				orphan.visit();
 				this.sorted.add(orphan);

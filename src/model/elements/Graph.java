@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
+import model.algorithms.AlgorithmState;
 import model.algorithms.TopologicalSortAlgorithm;
 
 import exceptions.AlgorithmException;
@@ -56,7 +57,9 @@ public class Graph {
 			AlgorithmException {
 		TopologicalSortAlgorithm algorithm = new TopologicalSortAlgorithm();
 		algorithm.initialize(this);
-		algorithm.run();
+		while (algorithm.getState() != AlgorithmState.Finished) {
+			algorithm.run();
+		}
 		return algorithm.getResult() != null;
 	}
 
@@ -100,6 +103,7 @@ public class Graph {
 		values.add(edge);
 
 		if (this.type == GraphType.DirectedAcyclic && !this.isAcyclic()) {
+			edge.reset();
 			this.edges.get(edge.getFrom()).remove(edge);
 			throw new CycleInAcyclicGraphException(this);
 		}
@@ -138,6 +142,7 @@ public class Graph {
 
 	@Override
 	public String toString() {
-		return String.format("%s name=''", this.getClass(), this.name);
+		return String.format("%s name='%s'", this.getClass().getName(),
+				this.name);
 	}
 }

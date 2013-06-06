@@ -40,42 +40,35 @@ public class Edge extends GraphComponent {
 
 	@Override
 	public void paintComponent(Graphics g) {
-		double radius = this.from.getRadius();
+		double r = Vertex.VERTEX_RADIUS;
+		double d = this.to.getPosition().length(this.from.getPosition());
+		double t = ((d-r)/d);
 		
-//		double length = this.to.getPosition().length(this.from.getPosition()) - radius;
-		
-		Coordinate vector = this.from.getPosition().clone();
-		vector.normalize();
-//		System.out.println(String.format("%s: (%s,%s)", this.from.getName(), vector.x, vector.y));
-		vector.x = vector.x * radius; vector.y = vector.y * radius;
-//		System.out.println(String.format("New %s: (%s,%s)", this.from.getName(), vector.x, vector.y));
-		
-		Coordinate to = new Coordinate(this.to.getPosition().x - vector.x,
-				this.to.getPosition().y - vector.y);
+		Coordinate to = new Coordinate(
+				this.from.getPosition().x + t * (this.to.getPosition().x - this.from.getPosition().x),
+				this.from.getPosition().y + t * (this.to.getPosition().y - this.from.getPosition().y));
 		
 		GraphicsUtils.drawArrow(g, this.color, ARROW_SIZE,
 				this.from.getPosition(), to, 
-				new Coordinate(radius, radius));
+				new Coordinate(r, r));
 		
 		if (this.attribute != null && !this.attribute.equals("")) {
+			double offset = 8;
+			if (this.from.getPosition().x - this.to.getPosition().x > 0) offset = offset * -1;
+			
 			Coordinate position = new Coordinate(
 					(this.from.getPosition().x + this.to.getPosition().x) / 2,
 					(this.from.getPosition().y + this.to.getPosition().y) / 2);
+			
 			GraphicsUtils.drawText(g, this.color, new Font("Verdana", Font.PLAIN, 10),
 					this.attribute, position, 
-					new Coordinate(8 + radius, radius));
+					new Coordinate(offset + r, offset + r));
 		}
 	}
 
 	public void reset() {
 		this.color = Color.black;
 		this.visisted = false;
-	}
-	
-	@Override
-	public String toString() {
-		return String.format("%s from='%s' to='%s'", this.getClass().getName(), 
-				this.from.getName(), this.to.getName());
 	}
 
 	public Vertex getFrom() {
@@ -96,6 +89,14 @@ public class Edge extends GraphComponent {
 
 	@Override
 	public Edge clone() {
-		return new Edge(this.from, this.to, this.attribute);
+		return new Edge(this.from.clone(), this.to.clone(), this.attribute);
 	}
+	
+	@Override
+	public String toString() {
+		return String.format("%s from='%s' to='%s'", this.getClass().getName(), 
+				this.from == null ? "" : this.from.getName(), 
+						this.to == null ? "" : this.to.getName());
+	}
+	
 }
