@@ -1,7 +1,7 @@
 package model.algorithms;
 
-import exceptions.GraphComponentException;
 import model.elements.Graph;
+import exceptions.GraphComponentException;
 
 public abstract class SearchAlgorithm extends Algorithm {
 
@@ -20,8 +20,7 @@ public abstract class SearchAlgorithm extends Algorithm {
 		this.find = null;
 	}
 
-	public void initialize(String find, Graph graph)
-			throws GraphComponentException {
+	public void initialize(String find, Graph graph) throws GraphComponentException {
 		this.find = find;
 		this.graph = graph;
 		this.state = AlgorithmState.Initialized;

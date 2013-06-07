@@ -8,19 +8,15 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import exceptions.AlgorithmAlreadyFinishedException;
-import exceptions.AlgorithmException;
-import exceptions.GraphComponentException;
-import exceptions.GraphException;
-import exceptions.UnsupportedGraphException;
-
 import model.algorithms.Algorithm;
 import model.algorithms.AlgorithmState;
 import model.algorithms.BFS;
 import model.algorithms.DFS;
-import model.algorithms.Kruskal;
+import model.algorithms.Dijkstras;
+import model.algorithms.Kruskals;
 import model.algorithms.MSTAlgorithm;
 import model.algorithms.SearchAlgorithm;
+import model.algorithms.ShortestRouteAlgorithm;
 import model.algorithms.SortAlgorithm;
 import model.algorithms.TopologicalSortAlgorithm;
 import model.elements.Graph;
@@ -28,6 +24,10 @@ import model.persistency.GraphsParser;
 import utils.ActionUtils;
 import utils.Dialog;
 import view.MainView;
+import exceptions.AlgorithmAlreadyFinishedException;
+import exceptions.AlgorithmException;
+import exceptions.GraphComponentException;
+import exceptions.GraphException;
 
 public class MainViewController {
 	
@@ -49,7 +49,8 @@ public class MainViewController {
 		this.algorithms = new ArrayList<Algorithm>();
 		this.algorithms.add(new BFS());
 		this.algorithms.add(new DFS());
-		this.algorithms.add(new Kruskal());
+		this.algorithms.add(new Kruskals());
+		this.algorithms.add(new Dijkstras());
 		this.algorithms.add(new TopologicalSortAlgorithm());
 //		this.ready = true;
 
@@ -152,44 +153,42 @@ public class MainViewController {
 		} 
 		
 		// Initialize
-		if (algorithm instanceof SearchAlgorithm) {
-			SearchAlgorithm searchAlgorithm = (SearchAlgorithm) algorithm;
-
-			if (searchAlgorithm.getState() == AlgorithmState.Clean) {
+		if (algorithm.getState() == AlgorithmState.Clean) {
+			if (algorithm instanceof SearchAlgorithm) {
+				SearchAlgorithm searchAlgorithm = (SearchAlgorithm) algorithm;
 				try {
 					searchAlgorithm.initialize(find, graph);
 				} catch (GraphComponentException e) {
-					e.printStackTrace();
+					Dialog.message(e.getMessage());
+					return;
 				}	
-			}
-		} else if (algorithm instanceof MSTAlgorithm) {
-			MSTAlgorithm mstAlgorithm = (MSTAlgorithm) algorithm;
+			} else if (algorithm instanceof ShortestRouteAlgorithm) {
+				ShortestRouteAlgorithm shorthAlgorithm = (ShortestRouteAlgorithm) algorithm;
 
-			if (mstAlgorithm.getState() == AlgorithmState.Clean) {
+				try {
+					shorthAlgorithm.initialize(find, graph);
+				} catch (GraphComponentException | GraphException e) {
+					Dialog.message(e.getMessage());
+					return;
+				}	
+			} else if (algorithm instanceof MSTAlgorithm) {
+				MSTAlgorithm mstAlgorithm = (MSTAlgorithm) algorithm;
+
 				try {
 					mstAlgorithm.initialize(graph);
-				} catch (UnsupportedGraphException e) {
-					Dialog.message("Graph must be weighted!");
+				} catch (GraphComponentException | GraphException e) {
+					Dialog.message(e.getMessage());
 					return;
-				} catch (GraphException e) {
-					e.printStackTrace();
-				} catch (GraphComponentException e) {
-					e.printStackTrace();
 				}
-			}
-		} else if (algorithm instanceof SortAlgorithm) {
-			SortAlgorithm sortAlgorithm = (SortAlgorithm) algorithm;
-			
-			if (sortAlgorithm.getState() == AlgorithmState.Clean) {
+
+			} else if (algorithm instanceof SortAlgorithm) {
+				SortAlgorithm sortAlgorithm = (SortAlgorithm) algorithm;
+
 				try {
 					sortAlgorithm.initialize(graph);
-				} catch (UnsupportedGraphException e) {
-					Dialog.message("Graph must be directed!");
+				} catch (GraphComponentException | GraphException e) {
+					Dialog.message(e.getMessage());
 					return;
-				} catch (GraphException e) {
-					e.printStackTrace();
-				} catch (GraphComponentException e) {
-					e.printStackTrace();
 				}
 			}
 		}

@@ -15,15 +15,15 @@ import exceptions.CycleInAcyclicGraphException;
 import exceptions.GraphComponentException;
 import exceptions.GraphException;
 
-public class Kruskal extends MSTAlgorithm {
+public class Kruskals extends MSTAlgorithm {
 
 	private PriorityQueue<Edge> edges;
 
 	/**
 	 * 
 	 */
-	public Kruskal() {
-		super("Kruskal");
+	public Kruskals() {
+		super("Kruskal's");
 	}
 
 	@Override
@@ -82,8 +82,6 @@ public class Kruskal extends MSTAlgorithm {
 
 		// Take cheapest edge
 		Edge edge = this.edges.remove();
-		System.out.println(String.format("Current edge: %s->%s", edge.getFrom()
-				.getName(), edge.getTo().getName()));
 		Edge edgeClone = edge.clone();
 
 		// Create temporary graph with visited components
@@ -123,14 +121,12 @@ public class Kruskal extends MSTAlgorithm {
 			graph.addEdge(edgeClone);
 		} catch (CycleInAcyclicGraphException e) {
 			// Didn't work out.
-			System.out.println("Cycle occured ----------------");
 			edge.reset();
 			this.iterate();
 			return;
 		}
 
 		// Did work out!
-		System.out.println("Edge added!");
 		edge.visit();
 		if (!edge.getTo().isVisited())
 			edge.getTo().visit();

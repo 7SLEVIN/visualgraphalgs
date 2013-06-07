@@ -6,21 +6,24 @@ import exceptions.GraphComponentException;
 import exceptions.GraphException;
 import exceptions.UnsupportedGraphException;
 
-public abstract class MSTAlgorithm extends Algorithm {
+public abstract class ShortestRouteAlgorithm extends Algorithm {
+	
+	protected String destination;
 
 	/**
 	 * @param name
 	 */
-	public MSTAlgorithm(String name) {
+	public ShortestRouteAlgorithm(String name) {
 		super(name);
 	}
 	
-	public void initialize(Graph graph) throws GraphException, GraphComponentException {
+	public void initialize(String destination, Graph graph) throws GraphException,
+			GraphComponentException {
 		if (graph.getAttributeType() != GraphAttributeType.Weighted) {
-			throw new UnsupportedGraphException("Cannot initialize MSTAlgorithm with unweighted graph", graph);
+			throw new UnsupportedGraphException("Cannot initialize ShortestRouteAlgorithm with unweighted graph", graph);
 		}
+		this.destination = destination;
 		this.graph = graph;
 		this.state = AlgorithmState.Initialized;
 	}
-
 }

@@ -40,15 +40,11 @@ public class DFS extends SearchAlgorithm {
 	@Override
 	protected void iterate() throws GraphComponentException {
 
-		System.out.println("Current: " + this.currentVertex.getName());
-
 		// Go through neighbours
 		if (this.edges != null && !this.edges.isEmpty()) {
 			Edge edge = this.edges.remove();
 
 			Vertex toVertex = edge.getTo();
-
-			System.out.println("Current edge: " + toVertex.getName());
 
 			// Visit
 			if (!toVertex.isVisited()) {
@@ -68,7 +64,6 @@ public class DFS extends SearchAlgorithm {
 				}
 			} else {
 				this.stack.push(this.currentVertex.getParent());
-				System.out.println("Already visited: " + toVertex.getName());
 				this.iterate();
 				return;
 			}
@@ -76,7 +71,6 @@ public class DFS extends SearchAlgorithm {
 
 		// Graph covered without finding anything
 		if (this.stack.isEmpty()) {
-			System.out.println("Stack empty");
 			if (this.result == null) this.result = "0";
 			this.state = AlgorithmState.Finished;
 			return;
@@ -94,7 +88,6 @@ public class DFS extends SearchAlgorithm {
 
 		ArrayList<Edge> found = graph.getEdges(this.currentVertex);
 		if (found == null) {
-			System.out.println("No edges found");
 			this.stack.push(this.currentVertex.getParent());
 			this.setAttribute(this.currentVertex);
 			this.iterate(); // no edges
@@ -104,13 +97,11 @@ public class DFS extends SearchAlgorithm {
 		this.edges = new PriorityQueue<Edge>(found.size(), new EdgeComparator(
 				EdgeComparatorType.Name));
 		for (Edge edge : found) {
-			if (!edge.getTo().isVisited())
-				this.edges.add(edge);
+			if (!edge.getTo().isVisited()) this.edges.add(edge);
 		}
 		if (this.edges.isEmpty()) {
 			this.stack.push(this.currentVertex.getParent());
 			this.setAttribute(this.currentVertex);
-			System.out.println("No unvisited edges found");
 		}
 	}
 
