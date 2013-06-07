@@ -15,6 +15,7 @@ public class Edge extends GraphComponent {
 
 	private Vertex from;
 	private Vertex to;
+	private EdgeType type;
 
 	/**
 	 * @param from
@@ -34,8 +35,9 @@ public class Edge extends GraphComponent {
 
 		this.from = from;
 		this.to = to;
-		this.color = Color.black;
 		this.attribute = attribute;
+		this.color = Color.black;
+		this.type = EdgeType.Directed; // TODO
 	}
 
 	@Override
@@ -81,6 +83,10 @@ public class Edge extends GraphComponent {
 
 	public Vertex getTo() {
 		return to;
+	}
+
+	public EdgeType getType() {
+		return type;
 	}
 
 	public void setTo(Vertex to) {

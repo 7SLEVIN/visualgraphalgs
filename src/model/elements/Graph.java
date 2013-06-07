@@ -5,8 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 
 import model.algorithms.AlgorithmState;
-import model.algorithms.TopologicalSortAlgorithm;
-
+import model.algorithms.elements.TopologicalSortAlgorithm;
 import exceptions.AlgorithmException;
 import exceptions.CycleInAcyclicGraphException;
 import exceptions.GraphComponentException;
@@ -19,7 +18,8 @@ public class Graph {
 	private GraphType type;
 	private GraphAttributeType attributeType;
 	private HashMap<String, Vertex> vertices;
-	private HashMap<Vertex, Collection<Edge>> edges;
+	private HashMap<Vertex, Collection<Edge>> edgesFrom;
+	private HashMap<Vertex, Collection<Edge>> edgesTo;
 	private Vertex first;
 
 	/**
@@ -31,6 +31,7 @@ public class Graph {
 
 	/**
 	 * @param name
+	 * @param type
 	 * @param attributeType
 	 */
 	public Graph(String name, GraphType type, GraphAttributeType attributeType) {
@@ -38,14 +39,13 @@ public class Graph {
 		this.type = type;
 		this.attributeType = attributeType;
 		this.vertices = new HashMap<String, Vertex>();
-		this.edges = new HashMap<Vertex, Collection<Edge>>();
+		this.edgesFrom = new HashMap<Vertex, Collection<Edge>>();
+		this.edgesTo = new HashMap<Vertex, Collection<Edge>>();
 	}
 
 	public void reset() {
-		for (Collection<Edge> values : this.edges.values()) {
-			for (Edge edge : values) {
-				edge.reset();
-			}
+		for (Edge edge : this.getEdgesAsList()) {
+			edge.reset();
 		}
 
 		for (Vertex vertex : this.getVertices().values()) {
@@ -73,18 +73,22 @@ public class Graph {
 
 	public ArrayList<Edge> getEdgesAsList() {
 		ArrayList<Edge> found = new ArrayList<Edge>();
-		for (Collection<Edge> coll : this.edges.values()) {
+		for (Collection<Edge> coll : this.edgesFrom.values()) {
 			found.addAll(coll);
 		}
 		return found;
 	}
 
 	public HashMap<Vertex, Collection<Edge>> getEdges() {
-		return this.edges;
+		return this.edgesFrom;
 	}
 
-	public ArrayList<Edge> getEdges(Vertex vertex) {
-		return (ArrayList<Edge>) this.edges.get(vertex);
+	public ArrayList<Edge> getEdgesFrom(Vertex vertex) {
+		return (ArrayList<Edge>) this.edgesFrom.get(vertex);
+	}
+
+	public ArrayList<Edge> getEdgesTo(Vertex vertex) {
+		return (ArrayList<Edge>) this.edgesTo.get(vertex);
 	}
 
 	public void addEdge(Edge edge) throws GraphComponentException,
@@ -95,16 +99,20 @@ public class Graph {
 					"Cannot add unweighted edge to weighted graph", edge);
 		}
 
-		Collection<Edge> values = this.edges.get(edge.getFrom());
-		if (values == null) {
-			values = new ArrayList<Edge>();
-			this.edges.put(edge.getFrom(), values);
-		}
-		values.add(edge);
+		// Add from
+		if (this.edgesFrom.get(edge.getFrom()) == null)
+			this.edgesFrom.put(edge.getFrom(), new ArrayList<Edge>());
+		this.edgesFrom.get(edge.getFrom()).add(edge);
+		// Add to
+		if (this.edgesTo.get(edge.getTo()) == null)
+			this.edgesTo.put(edge.getTo(), new ArrayList<Edge>());
+		this.edgesTo.get(edge.getTo()).add(edge);
 
+		// Acyclic test
 		if (this.type == GraphType.DirectedAcyclic && !this.isAcyclic()) {
 			edge.reset();
-			this.edges.get(edge.getFrom()).remove(edge);
+			this.edgesFrom.get(edge.getFrom()).remove(edge);
+			this.edgesTo.get(edge.getTo()).remove(edge);
 			throw new CycleInAcyclicGraphException(this);
 		}
 	}
@@ -122,8 +130,8 @@ public class Graph {
 			this.first = vertex;
 
 		if (this.vertices.get(vertex.getName()) != null) {
-			System.err.println("WARNING: Overwriting vertex "
-					+ vertex.getName());
+			System.err.printf("WARNING: Overwriting vertex %s",
+					vertex.getName());
 		}
 		this.vertices.put(vertex.getName(), vertex);
 	}

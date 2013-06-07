@@ -1,4 +1,4 @@
-package model.algorithms;
+package model.algorithms.elements;
 
 import java.util.ArrayList;
 import java.util.PriorityQueue;
@@ -6,6 +6,8 @@ import java.util.Stack;
 
 import model.EdgeComparator;
 import model.EdgeComparatorType;
+import model.algorithms.AlgorithmState;
+import model.algorithms.SearchAlgorithm;
 import model.elements.Edge;
 import model.elements.Graph;
 import model.elements.Vertex;
@@ -76,7 +78,7 @@ public class DFS extends SearchAlgorithm {
 			return;
 		}
 
-		// Populate queue with neighbours
+		// Get new vertex
 		this.currentVertex = this.stack.pop();
 
 		// Back at start
@@ -86,14 +88,14 @@ public class DFS extends SearchAlgorithm {
 			return;
 		}
 
-		ArrayList<Edge> found = graph.getEdges(this.currentVertex);
+		// Populate queue with neighbours
+		ArrayList<Edge> found = graph.getEdgesFrom(this.currentVertex);
 		if (found == null) {
 			this.stack.push(this.currentVertex.getParent());
 			this.setAttribute(this.currentVertex);
 			this.iterate(); // no edges
 			return;
 		}
-
 		this.edges = new PriorityQueue<Edge>(found.size(), new EdgeComparator(
 				EdgeComparatorType.Name));
 		for (Edge edge : found) {

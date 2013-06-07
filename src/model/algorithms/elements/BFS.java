@@ -1,4 +1,4 @@
-package model.algorithms;
+package model.algorithms.elements;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -7,6 +7,8 @@ import java.util.Queue;
 
 import model.EdgeComparator;
 import model.EdgeComparatorType;
+import model.algorithms.AlgorithmState;
+import model.algorithms.SearchAlgorithm;
 import model.elements.Edge;
 import model.elements.Graph;
 import model.elements.Vertex;
@@ -74,7 +76,7 @@ public class BFS extends SearchAlgorithm {
 		Vertex vertex = this.queue.remove();
 		this.currentVertex = vertex;
 		
-		ArrayList<Edge> found = graph.getEdges(vertex); 
+		ArrayList<Edge> found = graph.getEdgesFrom(vertex); 
 		if (found == null) {
 			this.iterate(); // no edges
 			return;

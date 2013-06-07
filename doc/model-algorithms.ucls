@@ -28,8 +28,9 @@
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </enumeration>  
-  <class id="4" language="java" name="model.algorithms.TopologicalSortAlgorithm" project="VisualGraphAlgs" 
-    file="/VisualGraphAlgs/src/model/algorithms/TopologicalSortAlgorithm.java" binary="false" corner="BOTTOM_RIGHT">    
+  <class id="4" language="java" name="model.algorithms.elements.TopologicalSortAlgorithm" project="VisualGraphAlgs" 
+    file="/VisualGraphAlgs/src/model/algorithms/elements/TopologicalSortAlgorithm.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="903" y="356"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
@@ -37,8 +38,8 @@
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="5" language="java" name="model.algorithms.BFS" project="VisualGraphAlgs" 
-    file="/VisualGraphAlgs/src/model/algorithms/BFS.java" binary="false" corner="BOTTOM_RIGHT">    
+  <class id="5" language="java" name="model.algorithms.elements.BFS" project="VisualGraphAlgs" 
+    file="/VisualGraphAlgs/src/model/algorithms/elements/BFS.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="442" y="356"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
@@ -46,8 +47,8 @@
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="6" language="java" name="model.algorithms.DFS" project="VisualGraphAlgs" 
-    file="/VisualGraphAlgs/src/model/algorithms/DFS.java" binary="false" corner="BOTTOM_RIGHT">    
+  <class id="6" language="java" name="model.algorithms.elements.DFS" project="VisualGraphAlgs" 
+    file="/VisualGraphAlgs/src/model/algorithms/elements/DFS.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="666" y="374"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      

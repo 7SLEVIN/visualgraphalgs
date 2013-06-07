@@ -1,10 +1,12 @@
-package model.algorithms;
+package model.algorithms.elements;
 
 import java.util.Collection;
 import java.util.PriorityQueue;
 
 import model.EdgeComparator;
 import model.EdgeComparatorType;
+import model.algorithms.AlgorithmState;
+import model.algorithms.MSTAlgorithm;
 import model.elements.Edge;
 import model.elements.Graph;
 import model.elements.GraphAttributeType;
@@ -35,7 +37,7 @@ public class Kruskals extends MSTAlgorithm {
 		this.edges = new PriorityQueue<Edge>(graph.getEdgesAsList().size(),
 				new EdgeComparator(EdgeComparatorType.Weight));
 		for (Vertex vertex : graph.getVertices().values()) {
-			Collection<Edge> found = graph.getEdges(vertex);
+			Collection<Edge> found = graph.getEdgesFrom(vertex);
 			if (found == null)
 				continue;
 			for (Edge edge : found) {

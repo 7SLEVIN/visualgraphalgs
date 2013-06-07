@@ -10,15 +10,15 @@ import java.util.TimerTask;
 
 import model.algorithms.Algorithm;
 import model.algorithms.AlgorithmState;
-import model.algorithms.BFS;
-import model.algorithms.DFS;
-import model.algorithms.Dijkstras;
-import model.algorithms.Kruskals;
 import model.algorithms.MSTAlgorithm;
 import model.algorithms.SearchAlgorithm;
 import model.algorithms.ShortestRouteAlgorithm;
 import model.algorithms.SortAlgorithm;
-import model.algorithms.TopologicalSortAlgorithm;
+import model.algorithms.elements.BFS;
+import model.algorithms.elements.DFS;
+import model.algorithms.elements.Dijkstras;
+import model.algorithms.elements.Kruskals;
+import model.algorithms.elements.TopologicalSortAlgorithm;
 import model.elements.Graph;
 import model.persistency.GraphsParser;
 import utils.ActionUtils;
@@ -90,7 +90,8 @@ public class MainViewController {
 			public void itemStateChanged(ItemEvent e) {
 				reset();
 				if (e.getStateChange() == ItemEvent.SELECTED) {
-					if (view.getSelectedAlgorithm() instanceof SearchAlgorithm) {
+					if (view.getSelectedAlgorithm() instanceof SearchAlgorithm ||
+							view.getSelectedAlgorithm() instanceof ShortestRouteAlgorithm) {
 						view.getFindLabel().setVisible(true);
 						view.getFindInput().setVisible(true);
 					} else {
@@ -116,7 +117,6 @@ public class MainViewController {
 		
 		this.view.setResultLabel("");
 		this.setUIEnabled(true);
-//		this.ready = true;
 	}
 	
 	private void fillAlgorithms() {
@@ -130,10 +130,7 @@ public class MainViewController {
 	public void runAlgorithm(boolean step) {
 		final Algorithm algorithm = this.view.getSelectedAlgorithm();
 		Graph graph = this.view.getSelectedGraph();
-		String find = null;
-		if (algorithm instanceof SearchAlgorithm) {
-			find = this.view.getFindInput().getText();
-		}
+		String find = this.view.getFindInput().getText();
 		
 		// Safety
 		if (graph == null) {
@@ -147,10 +144,7 @@ public class MainViewController {
 				Dialog.message("No vertex name entered!");
 				return;
 			}
-//		} else if (!this.ready) {
-//			Dialog.message("You must reset first!");
-//			return;
-		} 
+		}
 		
 		// Initialize
 		if (algorithm.getState() == AlgorithmState.Clean) {

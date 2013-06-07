@@ -1,4 +1,4 @@
-package model.algorithms;
+package model.algorithms.elements;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -7,6 +7,8 @@ import java.util.Queue;
 
 import model.EdgeComparator;
 import model.EdgeComparatorType;
+import model.algorithms.AlgorithmState;
+import model.algorithms.ShortestRouteAlgorithm;
 import model.elements.Edge;
 import model.elements.Graph;
 import model.elements.Vertex;
@@ -30,9 +32,6 @@ public class Dijkstras extends ShortestRouteAlgorithm {
 			throws GraphComponentException, GraphException {
 		super.initialize(destination, graph);
 
-//		this.currentVertex = graph.getFirst();
-//		this.currentVertex.setAttribute(String.valueOf("0")); // depth
-
 		this.graph.getFirst().setAttribute("0");
 		this.queue.add(this.graph.getFirst());
 	}
@@ -43,7 +42,6 @@ public class Dijkstras extends ShortestRouteAlgorithm {
 		// Go through neighbours
 		if (this.edges != null && !this.edges.isEmpty()) {
 			Edge edge = this.edges.remove();
-
 			Vertex toVertex = edge.getTo();
 			
 			// Set distance
@@ -53,12 +51,16 @@ public class Dijkstras extends ShortestRouteAlgorithm {
 					length < Integer.parseInt(toVertex.getAttribute())) {
 				toVertex.setAttribute(String.valueOf(length));
 				edge.visit();
-				
+				ArrayList<Edge> otherEdges = (ArrayList<Edge>) this.graph.getEdgesTo(toVertex);
+				if (otherEdges != null) {
+					for (Edge e : otherEdges) {
+						if (e != edge) e.reset();
+					}
+				}
 			}
 			
+			// Unvisited vertex found
 			if (!toVertex.isVisited()) {
-//				toVertex.visit();
-
 				this.queue.add(toVertex);
 
 				// Correct found
@@ -71,8 +73,7 @@ public class Dijkstras extends ShortestRouteAlgorithm {
 			return;
 		}
 		
-		// Set vertex as ended
-//		if (this.graph.getFirst() != this.currentVertex) this.currentVertex.visit();
+		// Set vertex as visited/ended
 		if (this.currentVertex != null && 
 				!this.currentVertex.isVisited() &&
 				!this.currentVertex.isFound()) {
@@ -86,24 +87,21 @@ public class Dijkstras extends ShortestRouteAlgorithm {
 			return;
 		}
 
-		// Populate queue with neighbours
+		// Take new vertex
 		Vertex vertex = this.queue.remove();
 		this.currentVertex = vertex;
 
-		ArrayList<Edge> found = graph.getEdges(vertex);
+		// Populate edges
+		ArrayList<Edge> found = graph.getEdgesFrom(vertex);
 		if (found == null) {
 			this.iterate(); // no edges
 			return;
 		}
-
 		this.edges = new PriorityQueue<Edge>(found.size(), new EdgeComparator(
 				EdgeComparatorType.Name));
 		for (Edge edge : found) {
 			this.edges.add(edge);
 		}
-
-//		if (Integer.parseInt(this.currentVertex.getAttribute()) > 0)
-//			this.iterate();
 	}
 
 	@Override

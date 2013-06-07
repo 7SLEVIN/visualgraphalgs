@@ -1,8 +1,10 @@
-package model.algorithms;
+package model.algorithms.elements;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import model.algorithms.AlgorithmState;
+import model.algorithms.SortAlgorithm;
 import model.elements.Edge;
 import model.elements.Graph;
 import model.elements.Vertex;
