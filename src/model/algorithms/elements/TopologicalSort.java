@@ -7,11 +7,13 @@ import model.algorithms.AlgorithmState;
 import model.algorithms.SortAlgorithm;
 import model.elements.Edge;
 import model.elements.Graph;
+import model.elements.GraphType;
 import model.elements.Vertex;
 import exceptions.GraphComponentException;
 import exceptions.GraphException;
+import exceptions.UnsupportedGraphException;
 
-public class TopologicalSortAlgorithm extends SortAlgorithm {
+public class TopologicalSort extends SortAlgorithm {
 	
 	private ArrayList<Vertex> sorted;
 	private HashMap<String, Vertex> vertices;
@@ -20,7 +22,7 @@ public class TopologicalSortAlgorithm extends SortAlgorithm {
 	/**
 	 * 
 	 */
-	public TopologicalSortAlgorithm() {
+	public TopologicalSort() {
 		super("Topological Sort");
 		this.sorted = new ArrayList<Vertex>();
 		this.edges = new ArrayList<Edge>();
@@ -31,6 +33,9 @@ public class TopologicalSortAlgorithm extends SortAlgorithm {
 	public void initialize(Graph graph) throws GraphException,
 			GraphComponentException {
 		super.initialize(graph);
+		if (this.graph.getType() == GraphType.Undirected) {
+			throw new UnsupportedGraphException("Cannot initialize Topological Sort with a undirected graph", graph);
+		}
 		
 		this.vertices = (HashMap<String, Vertex>) graph.getVertices().clone();
 		for (Vertex vertex : this.vertices.values()) {

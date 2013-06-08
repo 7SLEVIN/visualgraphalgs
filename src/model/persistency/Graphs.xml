@@ -69,7 +69,7 @@
 		<edge from="B" to="D" />
 		<edge from="B" to="E" />
 	</graph>
-	<graph name="Acyclic">
+	<graph name="Acyclic" type="DirectedAcyclic">
 		<vertex name="B" x="50" y="350" />
 		<vertex name="A" x="600" y="350" />
 		<vertex name="E" x="120" y="60" />
@@ -92,5 +92,30 @@
 		<edge from="C" to="F" />
 		<edge from="H" to="A" />
 		<edge from="F" to="H" />
+	</graph>
+	<graph name="Undirected" type="Undirected">
+		<vertex name="A" x="50" y="50" />
+		<vertex name="I" x="75" y="225" />
+		<vertex name="H" x="160" y="400" />
+		<vertex name="B" x="350" y="50" />
+		<vertex name="D" x="375" y="225" />
+		<vertex name="E" x="450" y="400" />
+		<vertex name="G" x="670" y="50" />
+		<vertex name="F" x="600" y="225" />
+		<vertex name="J" x="650" y="400" />
+		<edge from="A" to="B" />
+		<edge from="A" to="I" />
+		<edge from="H" to="H" />
+		<edge from="I" to="D" />
+		<edge from="H" to="E" />
+		<edge from="B" to="D" />
+		<edge from="B" to="G" />
+		<edge from="D" to="G" />
+		<edge from="D" to="F" />
+		<edge from="D" to="E" />
+		<edge from="F" to="E" />
+		<edge from="G" to="J" />
+		<edge from="E" to="J" />
+		<edge from="I" to="H" />
 	</graph>
 </graphs>

@@ -12,6 +12,7 @@ import javax.xml.parsers.SAXParserFactory;
 
 import model.Coordinate;
 import model.elements.Edge;
+import model.elements.EdgeType;
 import model.elements.Graph;
 import model.elements.GraphAttributeType;
 import model.elements.GraphType;
@@ -41,19 +42,17 @@ public class GraphsParser extends DefaultHandler {
 		this.graphs = new ArrayList<Graph>();
 	}
 
-	public ArrayList<Graph> parse() {
+	public ArrayList<Graph> parse() throws Exception {
         SAXParserFactory factory = SAXParserFactory.newInstance();
 
         try {
                 InputStream xmlInput = this.getClass().getResourceAsStream(XML_FILE);
-
                 SAXParser saxParser = factory.newSAXParser();
 
                 saxParser.parse(xmlInput, this);
 
         } catch (FileNotFoundException e) {
-                System.out.println("ERROR: Cannot find file: " + XML_FILE);
-                System.exit(1);
+                throw new Exception("ERROR: Cannot find file: " + XML_FILE);
         } catch (ParserConfigurationException e) {
                 System.out.println("ERROR: ParserConfigurationException thrown");
                 System.exit(1);
@@ -90,6 +89,10 @@ public class GraphsParser extends DefaultHandler {
         	GraphType type = null;
         	if (atts.getValue("type") == null) {
         		type = GraphType.Directed;
+        	} else if (atts.getValue("type").equalsIgnoreCase("directedacyclic")) {
+        		type = GraphType.DirectedAcyclic;
+        	} else if (atts.getValue("type").equalsIgnoreCase("undirected")) {
+        		type = GraphType.Undirected;
         	} else {
         		try {
 					throw new MalformedGraphException(String.format("Unkown GraphTrype %s",
@@ -129,6 +132,7 @@ public class GraphsParser extends DefaultHandler {
 			Vertex from = current.getVertex(atts.getValue("from"));
 			Vertex to = current.getVertex(atts.getValue("to"));
 			Edge edge = new Edge(from, to);
+			if (current.getType() == GraphType.Undirected) edge.setType(EdgeType.Undirected);
 			String attribute = atts.getValue("attribute");
 			if (attribute != null && !attribute.equals("")) {
 				edge.setAttribute(attribute);

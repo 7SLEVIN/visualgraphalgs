@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 
 import model.algorithms.AlgorithmState;
-import model.algorithms.elements.TopologicalSortAlgorithm;
+import model.algorithms.elements.TopologicalSort;
 import exceptions.AlgorithmException;
 import exceptions.CycleInAcyclicGraphException;
 import exceptions.GraphComponentException;
@@ -55,7 +55,7 @@ public class Graph {
 
 	public boolean isAcyclic() throws GraphException, GraphComponentException,
 			AlgorithmException {
-		TopologicalSortAlgorithm algorithm = new TopologicalSortAlgorithm();
+		TopologicalSort algorithm = new TopologicalSort();
 		algorithm.initialize(this);
 		while (algorithm.getState() != AlgorithmState.Finished) {
 			algorithm.run();
@@ -97,6 +97,12 @@ public class Graph {
 				&& this.attributeType == GraphAttributeType.Weighted) {
 			throw new UnsupportedGraphComponentException(
 					"Cannot add unweighted edge to weighted graph", edge);
+		}
+		
+		if (edge.getType() == EdgeType.Undirected) {
+			Edge opposite = new Edge(edge.getTo(), edge.getFrom());
+			this.addEdge(opposite);
+			opposite.setType(EdgeType.Undirected);
 		}
 
 		// Add from

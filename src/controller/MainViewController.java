@@ -18,7 +18,7 @@ import model.algorithms.elements.BFS;
 import model.algorithms.elements.DFS;
 import model.algorithms.elements.Dijkstras;
 import model.algorithms.elements.Kruskals;
-import model.algorithms.elements.TopologicalSortAlgorithm;
+import model.algorithms.elements.TopologicalSort;
 import model.elements.Graph;
 import model.persistency.GraphsParser;
 import utils.ActionUtils;
@@ -45,13 +45,12 @@ public class MainViewController {
 	 */
 	public MainViewController(final MainView view) {
 		this.view = view;
-		this.graphs = new GraphsParser().parse();
 		this.algorithms = new ArrayList<Algorithm>();
 		this.algorithms.add(new BFS());
 		this.algorithms.add(new DFS());
 		this.algorithms.add(new Kruskals());
 		this.algorithms.add(new Dijkstras());
-		this.algorithms.add(new TopologicalSortAlgorithm());
+		this.algorithms.add(new TopologicalSort());
 //		this.ready = true;
 
 		ActionUtils.addActionListener(this.view.getStopButton(), this, "stopAlgorithm");
@@ -68,12 +67,6 @@ public class MainViewController {
 				runAlgorithm(false);
 			}
 		});
-
-		this.fillGraphs();
-		this.fillAlgorithms();
-		
-		this.view.getGraphComboBox().setSelectedIndex(0);
-		this.view.getCanvas().setGraph(graphs.get(0));
 		
 		this.view.getGraphComboBox().addItemListener(new ItemListener() {
 			@Override
@@ -101,6 +94,18 @@ public class MainViewController {
 				}
 			}	
 		});
+		
+		try {
+			this.graphs = new GraphsParser().parse();
+		} catch (Exception e) {
+			Dialog.message(e.getMessage());
+			return;
+		}
+		this.fillGraphs();
+		this.fillAlgorithms();
+		
+		this.view.getGraphComboBox().setSelectedIndex(0);
+		this.view.getCanvas().setGraph(graphs.get(0));
 	}
 	
 	public void reset() {
@@ -139,16 +144,15 @@ public class MainViewController {
 		} else if (algorithm == null) {
 			Dialog.message("No algorithm selected!");
 			return;
-		} else if (find != null) {
-			if (find.equals("")) {
-				Dialog.message("No vertex name entered!");
-				return;
-			}
 		}
 		
 		// Initialize
 		if (algorithm.getState() == AlgorithmState.Clean) {
 			if (algorithm instanceof SearchAlgorithm) {
+				if (find.equals("")) {
+					Dialog.message("No vertex name entered!");
+					return;
+				}
 				SearchAlgorithm searchAlgorithm = (SearchAlgorithm) algorithm;
 				try {
 					searchAlgorithm.initialize(find, graph);
@@ -157,6 +161,10 @@ public class MainViewController {
 					return;
 				}	
 			} else if (algorithm instanceof ShortestRouteAlgorithm) {
+				if (find.equals("")) {
+					Dialog.message("No vertex name entered!");
+					return;
+				}
 				ShortestRouteAlgorithm shorthAlgorithm = (ShortestRouteAlgorithm) algorithm;
 
 				try {
