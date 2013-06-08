@@ -37,8 +37,6 @@ public class MainViewController {
 	private ArrayList<Graph> graphs;
 	private ArrayList<Algorithm> algorithms;
 	private TimerTask timerTask;
-	
-//	private boolean ready;
 
 	/**
 	 * @param view
@@ -51,7 +49,6 @@ public class MainViewController {
 		this.algorithms.add(new Kruskals());
 		this.algorithms.add(new Dijkstras());
 		this.algorithms.add(new TopologicalSort());
-//		this.ready = true;
 
 		ActionUtils.addActionListener(this.view.getStopButton(), this, "stopAlgorithm");
 		ActionUtils.addActionListener(this.view.getResetButton(), this, "reset");
